@@ -142,7 +142,7 @@
 
 <div id="ingredientsForm" class="uk-margin-medium-top" style="display:none;">
     <h4>Ingredients for <span id="memberCount"></span> members</h4>
-    <form id="orderForm" method="POST" action="{{ route('order.ingredients') }}">
+    <form id="orderForm" method="POST" action="{{ route('user.order.ingredients') }}">
         @csrf
         <input type="hidden" name="dish_id" value="101">
         <input type="hidden" name="dish_name" value="Chicken Biryani">
@@ -251,7 +251,7 @@
 
         document.getElementById('memberCount').textContent = members;
 
-        const url = `{{ url('/get-ingredients') }}/${dishId}/${members}`;
+        const url = `{{ url('user/get-ingredients') }}/${dishId}/${members}`;
 
         fetch(url, {
             method: 'GET',

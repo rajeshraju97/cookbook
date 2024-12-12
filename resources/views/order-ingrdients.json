@@ -1,0 +1,11 @@
+{
+    "0": { "selected": "1", "quantity": "1", "name": "Rice" },
+    "2": { "selected": "1", "quantity": "1", "name": "Yogurt" },
+    "4": { "selected": "1", "quantity": "1", "name": "Tomatoes" },
+    "5": { "selected": "1", "quantity": "1", "name": "Ginger-Garlic Paste" },
+    "6": { "selected": "1", "quantity": "1", "name": "Chicken Masala" },
+    "7": { "selected": "1", "quantity": "1", "name": "Mint Leaves" },
+    "8": { "selected": "1", "quantity": "1", "name": "Coriander Leaves" },
+    "9": { "selected": "1", "quantity": "1", "name": "Green Chilies" },
+    "10": { "selected": "1", "quantity": "1", "name": "Lemons" }
+}
