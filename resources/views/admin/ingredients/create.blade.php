@@ -1,5 +1,5 @@
-@extends('layouts.app')
-@section('title', 'Add Ingredients')
+@extends('layouts.admin')
+@section('title', 'Ingredients List')
 @section('content')
 
 <div class="uk-container uk-margin-large-top">
