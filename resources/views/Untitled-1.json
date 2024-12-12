@@ -1,0 +1,59 @@
+{
+    "Rice": { 
+        "unit": "kg", 
+        "quantity": 1,
+         "price": 100, 
+         "type": "variable"
+         },
+
+    "Chicken": {
+        "unit": "kg",
+        "quantity": 1,
+        "price": 200,
+        "type": "variable"
+    },
+    "Yogurt": { "unit": "500 g", "quantity": 1, "price": 50, "type": "fixed" },
+    "Onions": { "unit": "250 g", "quantity": 1, "price": 30, "type": "fixed" },
+    "Tomatoes": {
+        "unit": "250 g",
+        "quantity": 1,
+        "price": 40,
+        "type": "fixed"
+    },
+    "Ginger-Garlic Paste": {
+        "unit": "packet",
+        "quantity": 1,
+        "price": 20,
+        "type": "fixed"
+    },
+    "Chicken Masala": {
+        "unit": "packet",
+        "quantity": 1,
+        "price": 10,
+        "type": "fixed"
+    },
+    "Mint Leaves": {
+        "unit": "100 g",
+        "quantity": 1,
+        "price": 15,
+        "type": "fixed"
+    },
+    "Coriander Leaves": {
+        "unit": "100 g",
+        "quantity": 1,
+        "price": 10,
+        "type": "fixed"
+    },
+    "Green Chilies": {
+        "unit": "10 g",
+        "quantity": 1,
+        "price": 5,
+        "type": "fixed"
+    },
+    "Lemons": {
+        "unit": "200 g (4 - 6 pcs)",
+        "quantity": 1,
+        "price": 10,
+        "type": "fixed"
+    }
+}
