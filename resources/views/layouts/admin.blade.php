@@ -84,10 +84,10 @@
                             <h4 class="text-section">Cookbook Recipes</h4>
                         </li>
                         <li class="nav-item">
-                            <a href="#base">
+                            <a href="{{route('admin.dish_type.index')}}">
                                 <i class="fas fa-layer-group"></i>
                                 <p>Dishes</p>
-                                <span class="caret"></span>
+                                <!-- <span class="caret"></span> -->
                             </a>
 
                         </li>
@@ -426,45 +426,48 @@
         $(document).ready(function () {
             // Success notification
             @if(session('success'))
+                var content = {
+                    message: "{{ session('success') }}",
+                    title: "Success",
+                    icon: "fa fa-bell"
+                };
 
-                content.message = "{{session('success')}}";
-                content.title = "Success";
-                content.icon = "fa fa-bell";
                 $.notify(content, {
-                    type: state,
+                    type: 'success', // You can change this to match your notification type
                     placement: {
-                        from: 'Top',
-                        align: 'Right',
+                        from: 'top', // Correct capitalization
+                        align: 'right' // Correct capitalization
                     },
                     time: 1000,
-                    delay: 0,
+                    delay: 5000, // Adjust delay if needed
                 });
             @endif
 
+
             // Error notification
             @if($errors->any())
-                $.notify(
-                    {
-                        message: "{{ $errors->first() }}",
-                        title: "Error",
-                        icon: "fa fa-exclamation-circle",
+                var content = {
+                    message: "{{ $errors->first() }}",
+                    title: "Error",
+                    icon: "fa fa-exclamation-circle",
+                };
+
+                $.notify(content, {
+                    type: "danger", // Error style
+                    allow_dismiss: true,
+                    delay: 5000,
+                    placement: {
+                        from: "top",
+                        align: "right",
                     },
-                    {
-                        type: "danger", // Error style
-                        allow_dismiss: true,
-                        delay: 5000,
-                        placement: {
-                            from: "top",
-                            align: "right",
-                        },
-                        offset: { x: 20, y: 70 },
-                        animate: {
-                            enter: "animated fadeInDown",
-                            exit: "animated fadeOutUp",
-                        },
-                    }
-                );
+                    offset: { x: 20, y: 70 },
+                    animate: {
+                        enter: "animated fadeInDown",
+                        exit: "animated fadeOutUp",
+                    },
+                });
             @endif
+
         });
     </script>
 

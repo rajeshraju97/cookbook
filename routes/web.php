@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\Admin\DishtypeController;
 use App\Http\Controllers\User\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RecipeController;
@@ -48,6 +49,7 @@ Route::prefix('admin')
     ->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         Route::resource('ingredients', IngredientController::class);
+        Route::resource('dish_type',DishtypeController::class);
     });
 
 Route::get('admin/login', [AdminController::class, 'showLoginForm'])->name('admin.login');
