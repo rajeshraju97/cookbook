@@ -16,6 +16,6 @@ class DishType extends Model
 
     public function dishes()
     {
-        return $this->belongsTo(Dish::class);
+        return $this->hasMany(Dish::class, 'dish_type_id'); // 'dish_type_id' is the foreign key in dishes table
     }
 }

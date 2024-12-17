@@ -1,59 +1,80 @@
 {
-    "Rice": { 
-        "unit": "kg", 
-        "quantity": 1,
-         "price": 100, 
-         "type": "variable"
-         },
-
     "Chicken": {
+        "quantity": "1",
         "unit": "kg",
-        "quantity": 1,
-        "price": 200,
+        "price": "150",
         "type": "variable"
     },
-    "Yogurt": { "unit": "500 g", "quantity": 1, "price": 50, "type": "fixed" },
-    "Onions": { "unit": "250 g", "quantity": 1, "price": 30, "type": "fixed" },
+    "Onions": {
+        "quantity": "300",
+        "unit": "g",
+        "price": "25",
+        "type": "variable"
+    },
     "Tomatoes": {
-        "unit": "250 g",
-        "quantity": 1,
-        "price": 40,
+        "quantity": "200",
+        "unit": "g",
+        "price": "10",
+        "type": "variable"
+    },
+    "Ginger-garlic paste": {
+        "quantity": "1",
+        "unit": "pack",
+        "price": "10",
+        "type": "variable"
+    },
+    "Green chilies": {
+        "quantity": "30",
+        "unit": "g",
+        "price": "10",
+        "type": "variable"
+    },
+    "Curry leaves": {
+        "quantity": "15",
+        "unit": "g",
+        "price": "10",
+        "type": "variable"
+    },
+    "Coriander powder": {
+        "quantity": "1",
+        "unit": "pack",
+        "price": "5",
         "type": "fixed"
     },
-    "Ginger-Garlic Paste": {
-        "unit": "packet",
-        "quantity": 1,
-        "price": 20,
+    "Cumin powder": {
+        "quantity": "1",
+        "unit": "pack",
+        "price": "5",
         "type": "fixed"
     },
-    "Chicken Masala": {
-        "unit": "packet",
-        "quantity": 1,
-        "price": 10,
+    "Red chili powder": {
+        "quantity": "1",
+        "unit": "pack",
+        "price": "5",
         "type": "fixed"
     },
-    "Mint Leaves": {
-        "unit": "100 g",
-        "quantity": 1,
-        "price": 15,
+    "Turmeric powder": {
+        "quantity": "1",
+        "unit": "pack",
+        "price": "5",
         "type": "fixed"
     },
-    "Coriander Leaves": {
-        "unit": "100 g",
-        "quantity": 1,
-        "price": 10,
+    "Garam masala": {
+        "quantity": "1",
+        "unit": "pack",
+        "price": "5",
         "type": "fixed"
     },
-    "Green Chilies": {
-        "unit": "10 g",
-        "quantity": 1,
-        "price": 5,
-        "type": "fixed"
+    "Coconut milk": {
+        "quantity": "200",
+        "unit": "ml",
+        "price": "50",
+        "type": "variable"
     },
-    "Lemons": {
-        "unit": "200 g (4 - 6 pcs)",
-        "quantity": 1,
-        "price": 10,
-        "type": "fixed"
+    "Coriander leaves": {
+        "quantity": "20",
+        "unit": "g",
+        "price": "10",
+        "type": "variable"
     }
 }

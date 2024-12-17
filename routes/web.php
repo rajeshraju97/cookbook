@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\Admin\DishesController;
 use App\Http\Controllers\Admin\DishtypeController;
 use App\Http\Controllers\User\DashboardController;
 use Illuminate\Support\Facades\Route;
@@ -42,6 +43,10 @@ Route::prefix('user')
 
 
 
+Route::get('admin/login', [AdminController::class, 'showLoginForm'])->name('admin.login');
+Route::post('admin/login', [AdminController::class, 'login'])->name('admin.login');
+
+
 
 Route::prefix('admin')
     ->name('admin.')
@@ -49,11 +54,9 @@ Route::prefix('admin')
     ->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         Route::resource('ingredients', IngredientController::class);
-        Route::resource('dish_type',DishtypeController::class);
+        Route::resource('dish_type', DishtypeController::class);
+        Route::resource('dishes', DishesController::class);
     });
-
-Route::get('admin/login', [AdminController::class, 'showLoginForm'])->name('admin.login');
-Route::post('admin/login', [AdminController::class, 'login'])->name('admin.login');
 
 
 

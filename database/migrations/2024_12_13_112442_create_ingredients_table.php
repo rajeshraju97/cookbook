@@ -11,11 +11,16 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('ingredients', function (Blueprint $table) {
-            $table->id('dish_id');
-            $table->string('dish_name');
+            $table->id(); // Primary key for the 'ingredients' table
+            $table->unsignedBigInteger('dish_id'); // Foreign key referencing the 'dishes' table
             $table->json('ingredients'); // JSON column to store ingredients
+            $table->bigInteger('no_of_members'); // Number of members
             $table->timestamps();
+
+            // Foreign key constraint
+            $table->foreign('dish_id')->references('id')->on('dishes')->onDelete('cascade');
         });
+
     }
 
     /**

@@ -39,9 +39,13 @@
 
                             <!-- Dish Name -->
                             <div class="mb-3">
-                                <label for="dishName" class="form-label">Dish Name</label>
-                                <input type="text" name="dish_name" id="dishName" class="form-control"
-                                    placeholder="e.g., Chicken Biryani" required>
+                                <label for="dishName" class="form-label">Dish</label>
+                                <select class="form-select form-control" name="dish_id">
+                                    <option value="">Select Dish</option>
+                                    @foreach($dishes as $dish)
+                                        <option value="{{$dish->id}}">{{$dish->dish_name}}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <!-- Ingredients Section -->
@@ -54,16 +58,19 @@
                                             <input type="text" name="ingredients[0][name]" id="ingredientName0"
                                                 class="form-control" placeholder="e.g., Rice" required>
                                         </div>
+
+                                        <div class="col-md-2">
+                                            <label for="quantity0" class="form-label">Quantity</label>
+                                            <input type="float" name="ingredients[0][quantity]" id="quantity0"
+                                                class="form-control" placeholder="e.g., 1" min="1" required>
+                                        </div>
+
                                         <div class="col-md-2">
                                             <label for="unit0" class="form-label">Unit</label>
                                             <input type="text" name="ingredients[0][unit]" id="unit0"
                                                 class="form-control" placeholder="e.g., kg" required>
                                         </div>
-                                        <div class="col-md-2">
-                                            <label for="quantity0" class="form-label">Quantity</label>
-                                            <input type="number" name="ingredients[0][quantity]" id="quantity0"
-                                                class="form-control" placeholder="e.g., 1" min="1" required>
-                                        </div>
+
                                         <div class="col-md-2">
                                             <label for="price0" class="form-label">Price</label>
                                             <input type="number" name="ingredients[0][price]" id="price0"
@@ -86,8 +93,16 @@
                             </div>
 
                             <!-- Add Ingredient Button -->
-                            <button type="button" id="addIngredientBtn" class="btn btn-secondary">Add Another
+                            <button type="button" id="addIngredientBtn" class="btn btn-secondary mb-3">Add Another
                                 Ingredient</button>
+
+                            <!-- No of members -->
+                            <div class="mb-3">
+                                <label for="dishName" class="form-label">No Of Members</label>
+                                <input type="number" name="no_of_members" id="dishName" class="form-control"
+                                    placeholder="e.g., 10" required>
+                            </div>
+
 
                             <!-- Submit Button -->
                             <div class="mt-4">
@@ -116,14 +131,15 @@
                 <label for="ingredientName${ingredientCount}" class="form-label">Ingredient Name</label>
                 <input type="text" name="ingredients[${ingredientCount}][name]" id="ingredientName${ingredientCount}" class="form-control" placeholder="e.g., Rice" required>
             </div>
+             <div class="col-md-2">
+                <label for="quantity${ingredientCount}" class="form-label">Quantity</label>
+                <input type="number" name="ingredients[${ingredientCount}][quantity]" id="quantity${ingredientCount}" class="form-control" placeholder="e.g., 1" min="1" required>
+            </div>
             <div class="col-md-2">
                 <label for="unit${ingredientCount}" class="form-label">Unit</label>
                 <input type="text" name="ingredients[${ingredientCount}][unit]" id="unit${ingredientCount}" class="form-control" placeholder="e.g., kg" required>
             </div>
-            <div class="col-md-2">
-                <label for="quantity${ingredientCount}" class="form-label">Quantity</label>
-                <input type="number" name="ingredients[${ingredientCount}][quantity]" id="quantity${ingredientCount}" class="form-control" placeholder="e.g., 1" min="1" required>
-            </div>
+           
             <div class="col-md-2">
                 <label for="price${ingredientCount}" class="form-label">Price</label>
                 <input type="number" name="ingredients[${ingredientCount}][price]" id="price${ingredientCount}" class="form-control" placeholder="e.g., 100" min="0" required>

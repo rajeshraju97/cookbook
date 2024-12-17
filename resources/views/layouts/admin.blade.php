@@ -86,6 +86,15 @@
                         <li class="nav-item">
                             <a href="{{route('admin.dish_type.index')}}">
                                 <i class="fas fa-layer-group"></i>
+                                <p>Dish Types</p>
+                                <!-- <span class="caret"></span> -->
+                            </a>
+
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{route('admin.dishes.index')}}">
+                                <i class="fas fa-mortar-pestle"></i>
                                 <p>Dishes</p>
                                 <!-- <span class="caret"></span> -->
                             </a>

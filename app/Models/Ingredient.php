@@ -9,7 +9,13 @@ class Ingredient extends Model
     //
     // Define the attributes that can be mass assigned
     use HasFactory;
-    protected $primaryKey = 'dish_id'; // Specify the primary key column
-    protected $fillable = ['dish_name', 'ingredients', 'no_members', 'total_price'];
+
+    protected $fillable = ['dish_id', 'ingredients', 'no_of_members'];
+
+
+    public function dishes()
+    {
+        return $this->belongsTo(Dishes::class, 'dish_id');
+    }
 
 }

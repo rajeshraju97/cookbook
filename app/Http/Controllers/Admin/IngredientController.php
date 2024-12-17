@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Dishes;
 use Illuminate\Http\Request;
 use App\Models\Ingredient;
 
@@ -24,7 +25,8 @@ class IngredientController extends Controller
     public function create()
     {
         //
-        return view('admin.ingredients.create');
+        $dishes = Dishes::all();
+        return view('admin.ingredients.create', compact('dishes'));
     }
 
     /**
@@ -34,21 +36,22 @@ class IngredientController extends Controller
     {
         // Validate the request
         $validated = $request->validate([
-            'dish_name' => 'required|string|max:255',
+            'dish_id' => 'required|int',
             'ingredients' => 'required|array',
             'ingredients.*.name' => 'required|string|max:255',
-            'ingredients.*.unit' => 'required|string|max:50',
             'ingredients.*.quantity' => 'required|numeric|min:1',
+            'ingredients.*.unit' => 'required|string|max:50',
             'ingredients.*.price' => 'required|numeric|min:0',
             'ingredients.*.type' => 'required|in:variable,fixed',
+            'no_of_members' => 'required|integer',
         ]);
 
         // Format the ingredients into a JSON structure
         $ingredientsJson = [];
         foreach ($validated['ingredients'] as $ingredient) {
             $ingredientsJson[$ingredient['name']] = [
-                'unit' => $ingredient['unit'],
                 'quantity' => $ingredient['quantity'],
+                'unit' => $ingredient['unit'],
                 'price' => $ingredient['price'],
                 'type' => $ingredient['type'],
             ];
@@ -56,14 +59,12 @@ class IngredientController extends Controller
 
         // Store the dish and its ingredients in the database
         Ingredient::create([
-            'dish_id' => 103,
-            'dish_name' => $validated['dish_name'],
+            'dish_id' => $request->dish_id,
             'ingredients' => json_encode($ingredientsJson), // Store as JSON
-            'no_members' => 30,
-            'total_price' => 750,
+            'no_of_members' => $request->no_of_members,
         ]);
 
-        return redirect()->route('ingredients.index')->with('success', 'Dish and ingredients added successfully!');
+        return redirect()->route('admin.ingredients.index')->with('success', 'Dish Ingredients added successfully!');
     }
 
     /**
@@ -77,18 +78,44 @@ class IngredientController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Ingredient $ingredient)
+    public function edit(string $id)
     {
-        return view('admin.ingredients.edit', compact('ingredient'));
+        //
+        $ingredient = Ingredient::find($id);
+        $dishes = Dishes::all();
+        return view('admin.ingredients.edit', compact('ingredient', 'dishes'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'dish_id' => 'required|integer',
+            'ingredients' => 'required|array',
+            'no_of_members' => 'required|integer',
+        ]);
+
+        $ingredients = $request->input('ingredients');
+        $formattedIngredients = [];
+
+        foreach ($ingredients as $ingredient) {
+            $name = $ingredient['name']; // Extract the ingredient name
+            unset($ingredient['name']); // Remove the name field from the array
+            $formattedIngredients[$name] = $ingredient;
+        }
+
+        // Update the ingredient record in the database
+        $ingredientRecord = Ingredient::find($id);
+        $ingredientRecord->dish_id = $validatedData['dish_id'];
+        $ingredientRecord->ingredients = json_encode($formattedIngredients);
+        $ingredientRecord->no_of_members = $validatedData['no_of_members'];
+        $ingredientRecord->save();
+
+        return redirect()->route('admin.ingredients.index')->with('success', 'Dish Ingredients updated successfully!');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -97,6 +124,6 @@ class IngredientController extends Controller
     {
         $ingredient->delete();
 
-        return redirect()->route('admin.ingredients.index')->with('success', 'Ingredient deleted successfully!');
+        return redirect()->route('admin.ingredients.index')->with('success', 'Dish Ingredients deleted successfully!');
     }
 }
