@@ -60,16 +60,18 @@
                                         </div>
 
                                         <div class="col-md-2">
-                                            <label for="quantity0" class="form-label">Quantity</label>
-                                            <input type="float" name="ingredients[0][quantity]" id="quantity0"
-                                                class="form-control" placeholder="e.g., 1" min="1" required>
+                                            <label for="unit0" class="form-label">Unit</label>
+                                            <input type="text" name="ingredients[0][unit]" id="unit0"
+                                                class="form-control" placeholder="e.g., 1 kg or 300 g" required>
                                         </div>
 
                                         <div class="col-md-2">
-                                            <label for="unit0" class="form-label">Unit</label>
-                                            <input type="text" name="ingredients[0][unit]" id="unit0"
-                                                class="form-control" placeholder="e.g., kg" required>
+                                            <label for="quantity0" class="form-label">Quantity</label>
+                                            <input type="number" name="ingredients[0][quantity]" id="quantity0"
+                                                class="form-control" placeholder="e.g., 1" min="1" required>
                                         </div>
+
+
 
                                         <div class="col-md-2">
                                             <label for="price0" class="form-label">Price</label>
@@ -131,14 +133,17 @@
                 <label for="ingredientName${ingredientCount}" class="form-label">Ingredient Name</label>
                 <input type="text" name="ingredients[${ingredientCount}][name]" id="ingredientName${ingredientCount}" class="form-control" placeholder="e.g., Rice" required>
             </div>
+
+             <div class="col-md-2">
+                <label for="unit${ingredientCount}" class="form-label">Unit</label>
+                <input type="text" name="ingredients[${ingredientCount}][unit]" id="unit${ingredientCount}" class="form-control" placeholder="e.g., 1 kg or 300 g" required>
+            </div>
+
              <div class="col-md-2">
                 <label for="quantity${ingredientCount}" class="form-label">Quantity</label>
                 <input type="number" name="ingredients[${ingredientCount}][quantity]" id="quantity${ingredientCount}" class="form-control" placeholder="e.g., 1" min="1" required>
             </div>
-            <div class="col-md-2">
-                <label for="unit${ingredientCount}" class="form-label">Unit</label>
-                <input type="text" name="ingredients[${ingredientCount}][unit]" id="unit${ingredientCount}" class="form-control" placeholder="e.g., kg" required>
-            </div>
+           
            
             <div class="col-md-2">
                 <label for="price${ingredientCount}" class="form-label">Price</label>

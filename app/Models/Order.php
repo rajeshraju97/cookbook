@@ -2,13 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
     //
     use HasFactory;
-    protected $fillable = ['dish_id', 'dish_name', 'ingredients'];
+    protected $fillable = [
+        "user_id",
+        "dish_id",
+        "ingredients",
+        "total_amount",
+        "status",
+    ];
 
+    public function dishes()
+    {
+        return $this->belongsTo(Dishes::class, 'dish_id');
+    }
 }

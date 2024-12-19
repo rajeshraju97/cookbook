@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Unique;
+use App\Models\UserAddress;
+
 
 class UserController extends Controller
 {
@@ -75,4 +77,43 @@ class UserController extends Controller
         $request->session()->regenerateToken();
         return redirect()->route('user.login');
     }
+
+    public function addAddress(Request $request)
+    {
+        $request->validate([
+            'label' => 'required|string|max:50',
+            'address_line_1' => 'required|string',
+            'city' => 'required|string',
+            'pincode' => 'required|numeric',
+        ]);
+
+        $user_id = Auth::guard('user')->user()->id;
+
+        UserAddress::create([
+            'user_id' => $user_id,
+            'label' => $request->input('label'),
+            'address_line_1' => $request->input('address_line_1'),
+            'address_line_2' => $request->input('address_line_2'),
+            'city' => $request->input('city'),
+            'pincode' => $request->input('pincode'),
+        ]);
+
+        return back()->with('success', 'Address added successfully!');
+    }
+
+    public function selectAddress(Request $request)
+    {
+        $request->validate(['address_id' => 'required|exists:user_addresses,id']);
+
+        $user_id = Auth::guard('user')->id();
+        $address = UserAddress::where('id', $request->address_id)
+            ->where('user_id', $user_id)
+            ->firstOrFail();
+
+        // Save selected address to user's session or orders table
+        session(['selected_address' => $address->toArray()]);
+
+        return response()->json(['message' => 'Address selected successfully!']);
+    }
+
 }

@@ -4,6 +4,7 @@
 use App\Http\Controllers\Admin\DishesController;
 use App\Http\Controllers\Admin\DishtypeController;
 use App\Http\Controllers\User\DashboardController;
+use App\Http\Controllers\user\OrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\HomeController;
@@ -25,7 +26,8 @@ Route::post('/login', [UserController::class, 'login'])->name('user.login');
 
 Route::post('/logout', [UserController::class, 'logout'])->name('user.logout');
 
-Route::get('/recipe', [HomeController::class, 'recipe'])->name('recipe');
+Route::get('/recipes', [HomeController::class, 'recipe'])->name('recipe');
+Route::get('/recipe/{id}', [HomeController::class, 'recipe_single_page'])->name('recipe_single_page');
 Route::get('/search', [HomeController::class, 'search'])->name('search');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
@@ -38,7 +40,12 @@ Route::prefix('user')
         Route::get('/profile', [DashboardController::class, 'dashboard'])->name('profile');
         Route::get('/settings', [DashboardController::class, 'dashboard'])->name('settings');
         Route::get('/get-ingredients/{dishId}/{members}', [RecipeController::class, 'getIngredients'])->name('get-ingredients');
-        Route::post('/order-ingredients', [RecipeController::class, 'orderIngredients'])->name('order.ingredients');
+        Route::post('/order-ingredients', [OrderController::class, 'addToCart'])->name('order.ingredients');
+        Route::get('/cart', [OrderController::class, 'viewCart'])->name('cart');
+        Route::post('/address/add', [UserController::class, 'addAddress'])->name('address.add');
+        Route::post('/address/select', [UserController::class, 'selectAddress'])->name('address.select');
+
+
     });
 
 

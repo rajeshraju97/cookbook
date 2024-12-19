@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Dishes;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -25,7 +26,7 @@ class HomeController extends Controller
 
     public function recipe()
     {
-        return view('recipe');
+        return view('recipes');
     }
 
     public function search()
@@ -36,5 +37,14 @@ class HomeController extends Controller
     public function contact()
     {
         return view('contact');
+    }
+
+    public function recipe_single_page($id)
+    {
+
+        $dish = Dishes::find($id);
+
+
+        return view('recipes_single_page', compact('dish'));
     }
 }

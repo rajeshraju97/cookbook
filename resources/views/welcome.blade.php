@@ -129,7 +129,7 @@
                                     <!-- <div class="uk-width-expand uk-text-right">by John Keller</div> -->
                                 </div>
                             </div>
-                            <a href="{{route('recipe')}}" class="uk-position-cover"></a>
+                            <a href="{{route('recipe_single_page', $id = 3)}}" class="uk-position-cover"></a>
                         </div>
                     </div>
 
@@ -191,6 +191,7 @@
                     <div>
                         <div class="uk-card">
                             <div class="uk-card-media-top uk-inline uk-light">
+
                                 <img class="uk-border-rounded-medium" src="{{asset('recipes/chickencurry.jpg')}}"
                                     alt="Course Title">
                                 <div class="uk-position-cover uk-card-overlay uk-border-rounded-medium"></div>
@@ -211,7 +212,7 @@
                                     <!-- <div class="uk-width-expand uk-text-right">by Aleaxa Dorchest</div> -->
                                 </div>
                             </div>
-                            <a href="" class="uk-position-cover"></a>
+                            <a href="{{route('recipe_single_page', $id = 1)}}" class="uk-position-cover"></a>
                         </div>
                     </div>
 

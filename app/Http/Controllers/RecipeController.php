@@ -12,7 +12,12 @@ class RecipeController extends Controller
     public function getIngredients($dishId, $members)
     {
         // Fetch the record by dish_id
-        $recipe = Ingredient::where('dish_id', $dishId)->first();
+        $recipe = Ingredient::where(
+            [
+                "dish_id" => $dishId,
+                "no_of_members" => $members
+            ]
+        )->first();
 
         // Handle cases where the recipe is not found
         if (!$recipe) {
@@ -27,7 +32,7 @@ class RecipeController extends Controller
         }
 
         // Scale ingredients based on the number of members
-        $baseMembers = $recipe->no_members;
+        $baseMembers = $recipe->no_of_members;
         $scaledIngredients = [];
 
         foreach ($baseIngredients as $name => $ingredient) {
@@ -35,14 +40,6 @@ class RecipeController extends Controller
             $scaledPrice = $ingredient['price'];
             $unit = $ingredient['unit'];
 
-
-            // If the quantity is numeric, scale it based on the number of members
-            if (is_numeric($ingredient['quantity'])) {
-                $scaledQuantity = ($ingredient['quantity'] / $baseMembers) * $members;
-            }
-
-            // Scale the price based on the number of members
-            $scaledPrice = ($ingredient['price'] / $baseMembers) * $members;
 
             // Store scaled ingredients with both quantity and price
             $scaledIngredients[] = [

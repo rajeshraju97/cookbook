@@ -1,11 +1,93 @@
-{
-    "0": { "selected": "1", "quantity": "1", "name": "Rice" },
-    "2": { "selected": "1", "quantity": "1", "name": "Yogurt" },
-    "4": { "selected": "1", "quantity": "1", "name": "Tomatoes" },
-    "5": { "selected": "1", "quantity": "1", "name": "Ginger-Garlic Paste" },
-    "6": { "selected": "1", "quantity": "1", "name": "Chicken Masala" },
-    "7": { "selected": "1", "quantity": "1", "name": "Mint Leaves" },
-    "8": { "selected": "1", "quantity": "1", "name": "Coriander Leaves" },
-    "9": { "selected": "1", "quantity": "1", "name": "Green Chilies" },
-    "10": { "selected": "1", "quantity": "1", "name": "Lemons" }
-}
+[
+    {
+        "selected": "1",
+        "quantity": "1.5",
+        "name": "Chicken",
+        "unit": "1 kg",
+        "scaled_price": "150"
+    },
+    {
+        "selected": "1",
+        "quantity": "1.5",
+        "name": "Onions",
+        "unit": "300 g",
+        "scaled_price": "25"
+    },
+    {
+        "selected": "1",
+        "quantity": "1.5",
+        "name": "Tomatoes",
+        "unit": "200 g",
+        "scaled_price": "10"
+    },
+    {
+        "selected": "1",
+        "quantity": "1",
+        "name": "Ginger-garlic paste",
+        "unit": "1 pack",
+        "scaled_price": "10"
+    },
+    {
+        "selected": "1",
+        "quantity": "1",
+        "name": "Green chilies",
+        "unit": "30 g",
+        "scaled_price": "10"
+    },
+    {
+        "selected": "1",
+        "quantity": "1",
+        "name": "Curry leaves",
+        "unit": "15 g",
+        "scaled_price": "10"
+    },
+    {
+        "selected": "1",
+        "quantity": "1",
+        "name": "Coriander powder",
+        "unit": "1 pack",
+        "scaled_price": "5"
+    },
+    {
+        "selected": "1",
+        "quantity": "1",
+        "name": "Cumin powder",
+        "unit": "1 pack",
+        "scaled_price": "5"
+    },
+    {
+        "selected": "1",
+        "quantity": "1",
+        "name": "Red chili powder",
+        "unit": "1 pack",
+        "scaled_price": "5"
+    },
+    {
+        "selected": "1",
+        "quantity": "1",
+        "name": "Turmeric powder",
+        "unit": "1 pack",
+        "scaled_price": "5"
+    },
+    {
+        "selected": "1",
+        "quantity": "1",
+        "name": "Garam masala",
+        "unit": "1 pack",
+        "scaled_price": "5"
+    },
+    {
+        "selected": "1",
+        "quantity": "1",
+        "name": "Coconut milk",
+        "unit": "200 ml",
+        "scaled_price": "50"
+    },
+    {
+        "selected": "1",
+        "quantity": "1",
+        "name": "Coriander leaves",
+        "unit": "20 g",
+        "scaled_price": "10"
+    }
+]

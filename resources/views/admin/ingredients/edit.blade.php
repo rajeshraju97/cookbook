@@ -65,18 +65,20 @@
                                             </div>
 
                                             <div class="col-md-2">
+                                                <label for="unit{{$loop->index}}" class="form-label">Unit</label>
+                                                <input type="text" name="ingredients[{{$loop->index}}][unit]"
+                                                    id="unit{{$loop->index}}" class="form-control"
+                                                    value="{{ $data['unit'] }}" required>
+                                            </div>
+
+                                            <div class="col-md-2">
                                                 <label for="quantity{{$loop->index}}" class="form-label">Quantity</label>
                                                 <input type="float" name="ingredients[{{$loop->index}}][quantity]"
                                                     id="quantity{{$loop->index}}" class="form-control"
                                                     value="{{ $data['quantity'] }}" min="1" required>
                                             </div>
 
-                                            <div class="col-md-2">
-                                                <label for="unit{{$loop->index}}" class="form-label">Unit</label>
-                                                <input type="text" name="ingredients[{{$loop->index}}][unit]"
-                                                    id="unit{{$loop->index}}" class="form-control"
-                                                    value="{{ $data['unit'] }}" required>
-                                            </div>
+                                            
 
                                             <div class="col-md-2">
                                                 <label for="price{{$loop->index}}" class="form-label">Price</label>
@@ -140,12 +142,12 @@
                 <input type="text" name="ingredients[${ingredientCount}][name]" id="ingredientName${ingredientCount}" class="form-control" placeholder="e.g., Rice" required>
             </div>
             <div class="col-md-2">
-                <label for="quantity${ingredientCount}" class="form-label">Quantity</label>
-                <input type="number" name="ingredients[${ingredientCount}][quantity]" id="quantity${ingredientCount}" class="form-control" placeholder="e.g., 1" min="1" required>
-            </div>
-            <div class="col-md-2">
                 <label for="unit${ingredientCount}" class="form-label">Unit</label>
                 <input type="text" name="ingredients[${ingredientCount}][unit]" id="unit${ingredientCount}" class="form-control" placeholder="e.g., kg" required>
+            </div>
+            <div class="col-md-2">
+                <label for="quantity${ingredientCount}" class="form-label">Quantity</label>
+                <input type="number" name="ingredients[${ingredientCount}][quantity]" id="quantity${ingredientCount}" class="form-control" placeholder="e.g., 1" min="1" required>
             </div>
             <div class="col-md-2">
                 <label for="price${ingredientCount}" class="form-label">Price</label>
