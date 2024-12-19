@@ -84,7 +84,7 @@
         align-items: center;
         padding: 10px 18px;
         gap: 10px;
-        width: 150%;
+        width: 100%;
         height: 41px;
         left: -24px;
     }
@@ -463,8 +463,8 @@
                         <span>PAYMENT METHOD</span>
                         <form>
                             <select class="form-select form-control" id="defaultSelect" fdprocessedid="hzwt2c">
-                                <option>Cash On Delivery</option>
                                 <option>UPI Payment</option>
+                                <option>Cash On Delivery</option>
                                 <option>Credit / Debit Card</option>
                             </select>
                         </form>
