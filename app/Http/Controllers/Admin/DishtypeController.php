@@ -33,6 +33,7 @@ class DishtypeController extends Controller
     {
         //
         $request->validate([
+            'category_name' => 'required|string|max:256',
             'type_name' => 'required|string|max:256',
         ]);
 
@@ -65,6 +66,7 @@ class DishtypeController extends Controller
     {
         //
         $request->validate([
+            'category_name' => 'required|string|max:256',
             'type_name' => 'required|string|max:256'
         ]);
         $dishType = DishType::find($id);

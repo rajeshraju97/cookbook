@@ -461,13 +461,13 @@
                     <hr>
                     <div>
                         <span>PAYMENT METHOD</span>
-                        <form>
-                            <select class="form-select form-control" id="defaultSelect" fdprocessedid="hzwt2c">
-                                <option>UPI Payment</option>
-                                <option>Cash On Delivery</option>
-                                <option>Credit / Debit Card</option>
-                            </select>
-                        </form>
+
+                        <select class="form-select form-control" id="defaultSelect" fdprocessedid="hzwt2c">
+                            <option>UPI Payment</option>
+                            <option>Cash On Delivery</option>
+                            <option>Credit / Debit Card</option>
+                        </select>
+
                     </div>
                     <hr>
                     <div class="promo">
@@ -495,11 +495,38 @@
 
         <div class="card checkout mt-2">
             <div class="footer">
-                <label class="price">
-                    <span>₹{{ number_format($cartItems->sum('total_amount') + 50 + 30.40, 2) }}</span></label>
-                <button class="button-30" role="button">Checkout</button>
+                <form action="{{ route('user.checkout') }}" method="POST">
+                    @csrf
+                    <input type="text" name="order_ids" value="{{ $cartItems->pluck('id')->join(',') }}">
+
+                    <div style="margin-bottom: 1rem;">
+                        <h4>Select Payment Method</h4>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="payment_method" id="cod" value="COD"
+                                required>
+                            <label class="form-check-label" for="cod">
+                                <i class="fas fa-money-bill-wave me-2"></i> Cash on Delivery
+                            </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="payment_method" id="razorpay"
+                                value="Online" required>
+                            <label class="form-check-label" for="razorpay">
+                                <i class="fas fa-credit-card me-2"></i> Pay Online (Razorpay)
+                            </label>
+                        </div>
+                    </div>
+
+                    <label class="price">
+                        <span>Total: ₹{{ number_format($cartItems->sum('total_amount') + 50 + 30.40, 2) }}</span>
+                    </label>
+
+                    <button type="submit" class="button-30" role="button">Proceed to Payment</button>
+                </form>
+
             </div>
         </div>
+
 
     </div>
 
@@ -509,6 +536,51 @@
 
 
 <script>
+
+
+    document.getElementById('cod-btn').addEventListener('click', function () {
+        document.getElementById('payment-method-input').value = 'COD';
+        document.querySelector('form').submit();
+    });
+
+    document.getElementById('razorpay-btn').addEventListener('click', function () {
+        const totalAmount = {{ $cartItems->sum('total_amount') + 50 + 30.40 }};
+
+        fetch("{{ route('user.create-payment-order') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            },
+            body: JSON.stringify({ amount: totalAmount })
+        })
+            .then(response => response.json())
+            .then(paymentData => {
+                const options = {
+                    key: paymentData.key,
+                    amount: paymentData.amount,
+                    currency: paymentData.currency,
+                    order_id: paymentData.order_id,
+                    handler: function (response) {
+                        document.getElementById('payment-method-input').value = 'Razorpay';
+                        document.querySelector('form').submit();
+                    },
+                    modal: {
+                        ondismiss: function () {
+                            alert('Payment cancelled.');
+                        },
+                    },
+                };
+                const rzp = new Razorpay(options);
+                rzp.open();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to initiate payment. Try again.');
+            });
+    });
+
+
     // Define selectAddress in the global scope
 
     function selectAddress(addressId) {
@@ -549,6 +621,8 @@
             $("#addRowModal").modal("hide");
         });
     });
+
+
 </script>
 
 

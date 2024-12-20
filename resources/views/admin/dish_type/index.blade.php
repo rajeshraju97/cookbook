@@ -65,6 +65,11 @@
                                             <div class="row">
                                                 <div class="col-sm-12">
                                                     <div class="form-group form-group-default">
+                                                        <label>Category Name</label>
+                                                        <input id="addName" name="category_name" type="text"
+                                                            class="form-control" placeholder="fill Category Name" />
+                                                    </div>
+                                                    <div class="form-group form-group-default">
                                                         <label>Type Name</label>
                                                         <input id="addName" name="type_name" type="text"
                                                             class="form-control" placeholder="fill Type Name" />
@@ -103,11 +108,18 @@
                                             <div class="row">
                                                 <div class="col-sm-12">
                                                     <div class="form-group form-group-default">
-                                                        <label>Name</label>
-                                                        <input id="addName" name="type_name" type="text"
+                                                        <label>Category Name</label>
+                                                        <input id="category_name" name="category_name" type="text"
+                                                            class="form-control" placeholder="Enter Category Name"
+                                                            required />
+                                                    </div>
+                                                    <div class="form-group form-group-default">
+                                                        <label>Type Name</label>
+                                                        <input id="type_name" name="type_name" type="text"
                                                             class="form-control" placeholder="Enter Type Name"
                                                             required />
                                                     </div>
+
                                                 </div>
                                             </div>
                                             <div class="modal-footer border-0">
@@ -126,6 +138,7 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
+                                        <th>Category</th>
                                         <th>Type Name</th>
 
                                         <th style="width: 10%">Action</th>
@@ -135,6 +148,7 @@
                                     @forelse ($dishTypes as $types)
                                     <tr>
                                         <td>{{$loop->iteration}}</td>
+                                        <td>{{$types->category_name}}</td>
                                         <td>{{ $types->type_name }}</td>
                                         <td>
                                             <div class="form-button-action">
@@ -142,9 +156,10 @@
                                                 <button class="btn btn-link btn-lg ms-auto edit-button"
                                                     data-bs-toggle="modal" data-bs-target="#editRowModal"
                                                     data-id="{{ $types->id }}" data-name="{{ $types->type_name }}"
-                                                    title="Edit">
+                                                    data-category="{{ $types->category_name }}" title="Edit">
                                                     <i class="fa fa-edit"></i>
                                                 </button>
+
 
 
                                                 <form action="{{ route('admin.dish_type.destroy', $types->id) }}"
@@ -199,6 +214,7 @@
 
     });
 
+
     document.addEventListener('DOMContentLoaded', function () {
         const editButtons = document.querySelectorAll('.edit-button');
 
@@ -206,10 +222,12 @@
             button.addEventListener('click', function () {
                 const id = this.getAttribute('data-id');
                 const name = this.getAttribute('data-name');
+                const category = this.getAttribute('data-category'); // New attribute for category_name
 
                 // Populate the modal fields
                 const modal = document.getElementById('editRowModal');
-                modal.querySelector('#addName').value = name;
+                modal.querySelector('#category_name').value = category; // Populate category_name
+                modal.querySelector('#type_name').value = name; // Populate type_name
 
                 // Update the form action with the correct ID
                 const form = modal.querySelector('form');
@@ -217,6 +235,7 @@
             });
         });
     });
+
 
 
     document.addEventListener('DOMContentLoaded', function () {

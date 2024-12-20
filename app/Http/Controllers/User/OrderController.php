@@ -7,6 +7,7 @@ use App\Models\UserAddress;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Razorpayment;
 
 class OrderController extends Controller
 {
@@ -65,12 +66,6 @@ class OrderController extends Controller
             'addresses' => $addresses,
         ]);
     }
-
-
-
-
-
-
 
 
 

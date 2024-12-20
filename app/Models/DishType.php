@@ -10,7 +10,7 @@ class DishType extends Model
     //
     use HasFactory;
     protected $fillable = [
-        'dish_type',
+        'category_name',
         'type_name',
     ];
 

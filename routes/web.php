@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DishesController;
 use App\Http\Controllers\Admin\DishtypeController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\user\OrderController;
+use App\Http\Controllers\user\CheckoutController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\HomeController;
@@ -44,6 +45,16 @@ Route::prefix('user')
         Route::get('/cart', [OrderController::class, 'viewCart'])->name('cart');
         Route::post('/address/add', [UserController::class, 'addAddress'])->name('address.add');
         Route::post('/address/select', [UserController::class, 'selectAddress'])->name('address.select');
+
+        Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+        Route::get('/order-confirmation', function () {
+            return view('user.order-confirmation');
+        });
+        Route::post('/create-payment-order', [CheckoutController::class, 'createPaymentOrder'])->name('create-payment-order');
+
+
+        Route::get('/test-razorpay', [CheckoutController::class, 'testRazorpay']);
+
 
 
     });
