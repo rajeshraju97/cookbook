@@ -52,6 +52,10 @@ Route::prefix('user')
         });
         Route::post('/create-payment-order', [CheckoutController::class, 'createPaymentOrder'])->name('create-payment-order');
 
+        Route::post('/update-order-status', [CheckoutController::class, 'updateOrderStatus'])->name('user.update-order-status');
+
+        Route::delete('/cart/{id}', [CheckoutController::class, 'destroy'])->name('cart.destroy');
+
 
         Route::get('/test-razorpay', [CheckoutController::class, 'testRazorpay']);
 

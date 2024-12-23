@@ -4,6 +4,7 @@
 @include('layouts.nav')
 <!-- Include FontAwesome for the icons -->
 
+
 <style>
     /* Styles for the Cart Page */
     /* From Uiverse.io by mi-series */
@@ -19,6 +20,7 @@
         width: 100%;
         background: #FF7D29;
         box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
+        border-radius: 19px 19px 0px 0px;
     }
 
     .title {
@@ -36,19 +38,15 @@
     }
 
     /* Cart */
-    .cart {
-        border-radius: 19px 19px 0px 0px;
-    }
+
 
     .cart .steps {
-        display: flex;
-        flex-direction: column;
+
         padding: 20px;
 
     }
 
     .cart .steps .step {
-        display: grid;
         gap: 10px;
     }
 
@@ -70,41 +68,30 @@
     }
 
 
-    .shipping .form {
-        display: grid;
-        grid-template-columns: 1fr 80px;
-        gap: 10px;
-        padding: 0px;
-    }
+
 
     .shipping .form button {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
         padding: 10px 18px;
         gap: 10px;
-        width: 100%;
+        width: 75%;
         height: 41px;
         left: -24px;
     }
 
     /* Promo */
     .promo form {
-        display: grid;
-        grid-template-columns: 1fr 80px;
+        display: flex;
+        flex-wrap: wrap;
         gap: 10px;
-        padding: 0px;
     }
 
     .input_field {
-        width: auto;
+        width: 73%;
         height: 36px;
         padding: 0 0 0 12px;
         border-radius: 5px;
         outline: none;
         border: 1px solid #E5C7C5;
-
         transition: all 0.3s cubic-bezier(0.15, 0.83, 0.66, 1);
     }
 
@@ -115,13 +102,6 @@
     }
 
     .promo form button {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        padding: 10px 18px;
-        gap: 10px;
-        width: 100%;
         height: 36px;
         border-radius: 5px;
         border: 0;
@@ -129,33 +109,26 @@
         font-weight: 600;
         font-size: 12px;
         line-height: 15px;
-        color: #000000;
+        padding: 10px 18px;
     }
 
     /* Checkout */
     .payments .details {
         display: grid;
-        grid-template-columns: 10fr 1fr;
-        padding: 0px;
+        grid-template-columns: 8fr 1fr;
         gap: 5px;
+        word-wrap: break-word;
     }
 
-    .payments .details span:nth-child(odd) {
-        font-size: 12px;
-        font-weight: 600;
-        color: white;
-        margin: auto auto auto 0;
-    }
-
-    .payments .details span:nth-child(even) {
+    .payments .details span {
         font-size: 13px;
         font-weight: 600;
         color: white;
-        margin: auto 0 auto auto;
     }
 
     .checkout .footer {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
         padding: 10px 10px 10px 20px;
@@ -163,10 +136,10 @@
     }
 
     .price {
-        position: relative;
-        font-size: 22px;
+        font-size: 18px;
         color: white;
         font-weight: 900;
+        margin-bottom: 10px;
     }
 
     .checkout .checkout-btn {
@@ -176,7 +149,6 @@
         align-items: center;
         width: 150px;
         height: 36px;
-
         border-radius: 7px;
         border: 1px solid #ECC2C0;
         color: #000000;
@@ -230,7 +202,9 @@
         box-shadow: #D6D6E7 0 3px 7px inset;
         transform: translateY(2px);
     }
+</style>
 
+<style>
     /* modal desings */
     .modal-content {
         border-radius: 12px;
@@ -313,220 +287,225 @@
 </style>
 
 
-<div class="container" style="display: flex; gap: 2rem; margin-top: 2rem;">
+
+<div class="container-fluid">
     <!-- Left Panel: Dishes and Total -->
-    <div class="left-panel"
-        style="flex: 2; border-radius: 8px; padding: 1.5rem; background: #f9f9f9; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);height:fit-content;">
-        <h2 style="margin-bottom: 1rem; font-size: 1.5rem; font-weight: bold;">Your Dishes</h2>
-        @forelse ($cartItems as $item)
-            <div
-                style="display: flex; gap: 1rem; margin-bottom: 1rem; padding: 1rem; background: #fff; border: 1px solid #ddd; border-radius: 8px;">
-                <img src="{{asset('dishes_images/' . $item->dishes->dish_image) }}" alt="{{ $item->dishes->dish_name }}"
-                    style="width: 80px; height: 80px; border-radius: 8px; object-fit: cover;">
-                <div>
-                    <h3 style="margin: 0; font-size: 1.2rem;">{{ $item->dishes->dish_name }}</h3>
+    <div class="row">
+        <div class="left-panel col-12 col-lg-8">
+            <h2 style="margin-bottom: 1rem; font-size: 1.5rem; font-weight: bold;">Your Dishes</h2>
+            @forelse ($cartItems as $item)
+                <div
+                    style="display: flex; gap: 1rem; margin-bottom: 1rem; padding: 1rem; background: #fff; border: 1px solid #ddd; border-radius: 8px; align-items: center;">
+                    <img src="{{ asset('dishes_images/' . $item->dishes->dish_image) }}"
+                        alt="{{ $item->dishes->dish_name }}"
+                        style="width: 80px; height: 80px; border-radius: 8px; object-fit: cover;">
+                    <div style="flex-grow: 1;">
+                        <h3 style="margin: 0; font-size: 1.2rem;">{{ $item->dishes->dish_name }}</h3>
+                    </div>
+                    <!-- Delete Button -->
+                    <form action="{{ route('user.cart.destroy', $item->id) }}" method="POST" style="margin: 0;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                            style="background: #e74c3c; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </form>
                 </div>
-            </div>
-        @empty
-            <p>No items in your cart!</p>
-        @endforelse
-    </div>
+            @empty
+                <p>No items in your cart!</p>
+            @endforelse
+        </div>
 
-    <!-- Right Panel: Total Amount -->
-    <div class="right-panel" style="flex: 1; border-radius: 8px;  height: fit-content;">
 
-        <div class="card-body">
-            <!-- Modal -->
-            <div class="modal fade" id="addRowModal" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header border-0">
-                            <h5 class="modal-title">
-                                <span class="fw-bold">Add Address</span>
-                            </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="{{route('user.address.add')}}" method="post">
-                                @csrf
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="form-group mb-3">
-                                            <label class="mb-2">Address Label</label>
-                                            <div class="d-flex gap-2 flex-wrap">
-                                                <!-- Modern Styled Radio Buttons -->
-                                                <div class="form-check form-check-inline address-label">
-                                                    <input type="radio" id="home" name="label" value="Home"
-                                                        class="form-check-input">
-                                                    <label class="form-check-label" for="home">
-                                                        <i class="fas fa-home me-2"></i> Home
-                                                    </label>
+        <!-- Right Panel: Total Amount -->
+        @if ($cartItems->isNotEmpty())
+            <div class="right-panel col-12 col-lg-4">
+
+                <div class="card-body">
+                    <!-- Modal -->
+                    <div class="modal fade" id="addRowModal" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header border-0">
+                                    <h5 class="modal-title">
+                                        <span class="fw-bold">Add Address</span>
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{route('user.address.add')}}" method="post">
+                                        @csrf
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group mb-3">
+                                                    <label class="mb-2">Address Label</label>
+                                                    <div class="d-flex gap-2 flex-wrap">
+                                                        <!-- Modern Styled Radio Buttons -->
+                                                        <div class="form-check form-check-inline address-label">
+                                                            <input type="radio" id="home" name="label" value="Home"
+                                                                class="form-check-input">
+                                                            <label class="form-check-label" for="home">
+                                                                <i class="fas fa-home me-2"></i> Home
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline address-label">
+                                                            <input type="radio" id="work" name="label" value="Work"
+                                                                class="form-check-input">
+                                                            <label class="form-check-label" for="work">
+                                                                <i class="fas fa-briefcase me-2"></i> Work
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline address-label">
+                                                            <input type="radio" id="office" name="label" value="Office"
+                                                                class="form-check-input">
+                                                            <label class="form-check-label" for="office">
+                                                                <i class="fas fa-building me-2"></i> Office
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline address-label">
+                                                            <input type="radio" id="other" name="label" value="Other"
+                                                                class="form-check-input">
+                                                            <label class="form-check-label" for="other">
+                                                                <i class="fas fa-ellipsis-h me-2"></i> Other
+                                                            </label>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="form-check form-check-inline address-label">
-                                                    <input type="radio" id="work" name="label" value="Work"
-                                                        class="form-check-input">
-                                                    <label class="form-check-label" for="work">
-                                                        <i class="fas fa-briefcase me-2"></i> Work
-                                                    </label>
+
+                                                <div class="form-group mb-3">
+                                                    <label>Address Line 1</label>
+                                                    <input name="address_line_1" type="text" class="form-control"
+                                                        placeholder="Enter Address Line 1">
                                                 </div>
-                                                <div class="form-check form-check-inline address-label">
-                                                    <input type="radio" id="office" name="label" value="Office"
-                                                        class="form-check-input">
-                                                    <label class="form-check-label" for="office">
-                                                        <i class="fas fa-building me-2"></i> Office
-                                                    </label>
+                                                <div class="form-group mb-3">
+                                                    <label>Address Line 2</label>
+                                                    <input name="address_line_2" type="text" class="form-control"
+                                                        placeholder="Enter Address Line 2">
                                                 </div>
-                                                <div class="form-check form-check-inline address-label">
-                                                    <input type="radio" id="other" name="label" value="Other"
-                                                        class="form-check-input">
-                                                    <label class="form-check-label" for="other">
-                                                        <i class="fas fa-ellipsis-h me-2"></i> Other
-                                                    </label>
+                                                <div class="form-group mb-3">
+                                                    <label>City</label>
+                                                    <input name="city" type="text" class="form-control"
+                                                        placeholder="Enter City">
+                                                </div>
+                                                <div class="form-group mb-3">
+                                                    <label>Pincode</label>
+                                                    <input name="pincode" type="number" class="form-control"
+                                                        placeholder="Enter Pincode">
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="form-group mb-3">
-                                            <label>Address Line 1</label>
-                                            <input name="address_line_1" type="text" class="form-control"
-                                                placeholder="Enter Address Line 1">
+                                        <div class="modal-footer border-0">
+                                            <button type="submit" class="btn btn-primary w-100 py-2">
+                                                Add Address
+                                            </button>
                                         </div>
-                                        <div class="form-group mb-3">
-                                            <label>Address Line 2</label>
-                                            <input name="address_line_2" type="text" class="form-control"
-                                                placeholder="Enter Address Line 2">
-                                        </div>
-                                        <div class="form-group mb-3">
-                                            <label>City</label>
-                                            <input name="city" type="text" class="form-control"
-                                                placeholder="Enter City">
-                                        </div>
-                                        <div class="form-group mb-3">
-                                            <label>Pincode</label>
-                                            <input name="pincode" type="number" class="form-control"
-                                                placeholder="Enter Pincode">
-                                        </div>
-                                    </div>
+                                    </form>
                                 </div>
-
-                                <div class="modal-footer border-0">
-                                    <button type="submit" class="btn btn-primary w-100 py-2">
-                                        Add Address
-                                    </button>
-                                </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="card cart">
-            <label class="title">CHECKOUT</label>
-            <div class="steps">
-                <div class="step">
-                    <div class="shipping">
-                        <span>Delivery Address</span>
-                        <div class="form">
+                <div class="card cart">
+                    <label class="title">CHECKOUT</label>
+                    <div class="steps">
+                        <div class="step">
+                            <div class="shipping">
+                                <span>Delivery Address</span>
+                                <div class="form">
 
-                            @if ($addresses->isNotEmpty())
-                                <ul>
-                                    @foreach ($addresses as $address)
-                                        <li style="margin-bottom: 1rem;padding: 1rem; border-radius: 8px;">
-                                            <strong>{{ $address->label }}</strong>
-                                            <p>{{ $address->address_line_1 }},{{ $address->address_line_2 }},{{ $address->city }},
-                                                {{ $address->pincode }}
-                                            </p>
+                                    @if ($addresses->isNotEmpty())
+                                        <ul>
+                                            @foreach ($addresses as $address)
+                                                <li style="margin-bottom: 1rem;padding: 1rem; border-radius: 8px;">
+                                                    <strong>{{ $address->label }}</strong>
+                                                    <p>{{ $address->address_line_1 }},{{ $address->address_line_2 }},{{ $address->city }},
+                                                        {{ $address->pincode }}
+                                                    </p>
 
-                                            <button class="button-30" role="button"
-                                                onclick="selectAddress('{{ $address->id }}')">Set as
-                                                Default</button>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            @else
-                                <p class="text-danger">No saved addresses!</p>
-                                <!-- <button class="button-30" role="button">Add Address</button> -->
-                                <button class="button-30" role="button" data-bs-toggle="modal"
-                                    data-bs-target="#addRowModal">Add Address</button>
-                            @endif
-
-
-
-
+                                                    <button class="button-30" role="button"
+                                                        onclick="selectAddress('{{ $address->id }}')">Set as
+                                                        Default</button>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <p class="text-danger">No saved addresses!</p>
+                                        <!-- <button class="button-30" role="button">Add Address</button> -->
+                                        <button class="button-30" role="button" data-bs-toggle="modal"
+                                            data-bs-target="#addRowModal">Add Address</button>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="promo">
+                                <span>HAVE A PROMO CODE?</span>
+                                <form class="form">
+                                    <input class="input_field" placeholder="Enter a Promo Code" type="text">
+                                    <button class="button-30" role="button">Apply</button>
+                                </form>
+                            </div>
+                            <hr>
+                            <div class="payments">
+                                <span>PAYMENT</span>
+                                <div class="details">
+                                    <span>Subtotal:</span>
+                                    <span id="total-amount">₹{{ number_format($cartItems->sum('total_amount'), 2) }}</span>
+                                    <span>Shipping:</span>
+                                    <span>₹50.00</span>
+                                    <span>Tax:</span>
+                                    <span>₹30.40</span>
+                                </div>
+                            </div>
                         </div>
-
-
                     </div>
-                    <hr>
-                    <div>
-                        <span>PAYMENT METHOD</span>
+                </div>
 
-                        <select class="form-select form-control" id="defaultSelect" fdprocessedid="hzwt2c">
-                            <option>UPI Payment</option>
-                            <option>Cash On Delivery</option>
-                            <option>Credit / Debit Card</option>
-                        </select>
+                <div class="card checkout mt-2">
+                    <div class="footer">
+                        <form action="{{ route('user.checkout') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="order_ids" value="{{ $cartItems->pluck('id')->join(',') }}">
+                            <input type="hidden" name="total_amount"
+                                value="{{  number_format($cartItems->sum('total_amount') + 50 + 30.40, 2) }}">
 
-                    </div>
-                    <hr>
-                    <div class="promo">
-                        <span>HAVE A PROMO CODE?</span>
-                        <form class="form">
-                            <input class="input_field" placeholder="Enter a Promo Code" type="text">
-                            <button class="button-30" role="button">Apply</button>
+                            <div style="margin-bottom: 1rem;">
+                                <h4>Select Payment Method</h4>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="cod" value="COD"
+                                        required>
+                                    <label class="form-check-label" for="cod">
+                                        <i class="fas fa-money-bill-wave me-2"></i> <span class="text-light">Cash on
+                                            Delivery</span>
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="razorpay"
+                                        value="Online" required>
+                                    <label class="form-check-label" for="razorpay">
+                                        <i class="fas fa-credit-card me-2"></i><span class="text-light">Pay Online
+                                            (Razorpay)</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <label class="price" style="margin-right: 12pc;">
+                                Total: ₹{{ number_format($cartItems->sum('total_amount') + 50 + 30.40, 2) }}
+                            </label>
+
+                            <button type="submit" class="button-30" role="button">Checkout</button>
+
                         </form>
-                    </div>
-                    <hr>
-                    <div class="payments">
-                        <span>PAYMENT</span>
-                        <div class="details">
-                            <span>Subtotal:</span>
-                            <span id="total-amount">₹{{ number_format($cartItems->sum('total_amount'), 2) }}</span>
-                            <span>Shipping:</span>
-                            <span>₹50.00</span>
-                            <span>Tax:</span>
-                            <span>₹30.40</span>
-                        </div>
+
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="card checkout mt-2">
-            <div class="footer">
-                <form action="{{ route('user.checkout') }}" method="POST">
-                    @csrf
-                    <input type="text" name="order_ids" value="{{ $cartItems->pluck('id')->join(',') }}">
-
-                    <div style="margin-bottom: 1rem;">
-                        <h4>Select Payment Method</h4>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="payment_method" id="cod" value="COD"
-                                required>
-                            <label class="form-check-label" for="cod">
-                                <i class="fas fa-money-bill-wave me-2"></i> Cash on Delivery
-                            </label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="payment_method" id="razorpay"
-                                value="Online" required>
-                            <label class="form-check-label" for="razorpay">
-                                <i class="fas fa-credit-card me-2"></i> Pay Online (Razorpay)
-                            </label>
-                        </div>
-                    </div>
-
-                    <label class="price">
-                        <span>Total: ₹{{ number_format($cartItems->sum('total_amount') + 50 + 30.40, 2) }}</span>
-                    </label>
-
-                    <button type="submit" class="button-30" role="button">Proceed to Payment</button>
-                </form>
 
             </div>
-        </div>
 
+        @endif
 
     </div>
 
@@ -538,47 +517,6 @@
 <script>
 
 
-    document.getElementById('cod-btn').addEventListener('click', function () {
-        document.getElementById('payment-method-input').value = 'COD';
-        document.querySelector('form').submit();
-    });
-
-    document.getElementById('razorpay-btn').addEventListener('click', function () {
-        const totalAmount = {{ $cartItems->sum('total_amount') + 50 + 30.40 }};
-
-        fetch("{{ route('user.create-payment-order') }}", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": "{{ csrf_token() }}"
-            },
-            body: JSON.stringify({ amount: totalAmount })
-        })
-            .then(response => response.json())
-            .then(paymentData => {
-                const options = {
-                    key: paymentData.key,
-                    amount: paymentData.amount,
-                    currency: paymentData.currency,
-                    order_id: paymentData.order_id,
-                    handler: function (response) {
-                        document.getElementById('payment-method-input').value = 'Razorpay';
-                        document.querySelector('form').submit();
-                    },
-                    modal: {
-                        ondismiss: function () {
-                            alert('Payment cancelled.');
-                        },
-                    },
-                };
-                const rzp = new Razorpay(options);
-                rzp.open();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Failed to initiate payment. Try again.');
-            });
-    });
 
 
     // Define selectAddress in the global scope

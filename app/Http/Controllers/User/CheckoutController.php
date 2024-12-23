@@ -14,10 +14,14 @@ class CheckoutController extends Controller
 
     public function checkout(Request $request)
     {
+        $request->validate([
+            "payment_method" => "required",
+            'total_amount' => "required",
+        ]);
         $user = Auth::guard('user')->user();
         $orderIds = explode(',', $request->input('order_ids'));
         $paymentMethod = $request->input('payment_method');
-        $totalAmount = $request->input('total_amount') * 100;
+        $totalAmount = intval(round(($request->input('total_amount') * 100)));
 
         // Case 1: COD
         if ($paymentMethod === 'COD') {
@@ -33,7 +37,7 @@ class CheckoutController extends Controller
         if ($paymentMethod === 'Online') {
             $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
             $order = $api->order->create([
-                'amount' => 100,
+                'amount' => $totalAmount,
                 'currency' => 'INR',
                 'payment_capture' => 1, // Auto-capture payment
             ]);
@@ -44,6 +48,7 @@ class CheckoutController extends Controller
                 'amount' => $totalAmount * 100,
                 'currency' => 'INR',
                 'orderIds' => $orderIds,
+                'mobile' => $user->mobile,
             ]);
         }
 
@@ -101,6 +106,46 @@ class CheckoutController extends Controller
             return response()->json(['error' => $e->getMessage()]);
         }
     }
+
+    public function updateOrderStatus(Request $request)
+    {
+        $user = Auth::guard('user')->user();
+
+        $orderIds = explode(',', $request->input('order_ids'));
+        $paymentStatus = $request->input('payment_status');
+
+        try {
+            Order::whereIn('id', $orderIds)
+                ->where('user_id', $user->id)
+                ->update([
+                    'status' => 'Completed',
+                    'payment_status' => $paymentStatus,
+                ]);
+
+            return response()->json(['success' => true, 'message' => 'Order statuses updated successfully.']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function destroy($id)
+    {
+        // Find the order item by ID
+        $order = Order::findOrFail($id);
+
+        // Ensure the item belongs to the current user (optional for security)
+        if ($order->user_id !== auth('user')->user()->id) {
+            return redirect()->back()->with('error', 'Unauthorized action.');
+        }
+
+        // Delete the item
+        $order->delete();
+
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Item removed from your cart!');
+    }
+
+
 
 }
 
