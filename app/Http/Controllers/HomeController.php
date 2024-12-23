@@ -10,8 +10,10 @@ class HomeController extends Controller
 {
     //
 
+
     public function index(Request $request, $type_id = null)
     {
+        // Fetch categories and group them by category name
         $categories = DishType::all()->groupBy('category_name');
 
         // Determine the default type_id if not provided
@@ -23,25 +25,24 @@ class HomeController extends Controller
         // Get dishes for the selected type or all dishes if no type is selected
         $query = Dishes::query();
 
-        // Check if a valid dish type ID is provided
+        // If a valid dish type ID is provided, filter by dish type
         if ($type_id && is_numeric($type_id)) {
             $query->where('dish_type_id', $type_id);
         }
 
-        // Apply search
-        if ($request->has('search')) {
-            $searchTerm = trim($request->search); // Remove extra spaces
-            $searchTerm = str_replace('+', ' ', $searchTerm); // Replace '+' with spaces if needed
+        // Apply search if a search term is present
+        if ($request->has('search') && $request->search != '') {
+            $query = Dishes::query();
+            $searchTerm = trim($request->search); // Clean up spaces
+            $searchTerm = str_replace('+', ' ', $searchTerm); // Handle '+' as a space
 
+            // Search for dishes where the name matches the search term (case insensitive)
             $query->where('dish_name', 'like', '%' . strtolower($searchTerm) . '%');
+
+            // dd($query->toSql(), $query->getBindings());
         }
 
-        // Get the results
-        $dishes = $query->get();
-
-
-
-        // Apply sorting
+        // Apply sorting if provided
         if ($request->has('sort')) {
             switch ($request->sort) {
                 case 'top_rated':
@@ -55,14 +56,14 @@ class HomeController extends Controller
             }
         }
 
-        // Paginate results
+        // Paginate the results (use the same query that has filtering and sorting applied)
         $dishes = $query->paginate(1);
 
         // Pass data to the view
         return view('welcome', [
             'categories' => $categories,
             'dishes' => $dishes,
-            'selectedTypeId' => $type_id, // Pass the selected type_id to highlight it in the view
+            'selectedTypeId' => $type_id,
         ]);
     }
 
@@ -99,12 +100,16 @@ class HomeController extends Controller
             $query->where('dish_type_id', $type_id);
         }
 
-        // Apply search
-        if ($request->has('search')) {
-            $searchTerm = trim($request->search); // Remove extra spaces
-            $searchTerm = str_replace('+', ' ', $searchTerm); // Replace '+' with spaces if needed
+        // Apply search if a search term is present
+        if ($request->has('search') && $request->search != '') {
+            $query = Dishes::query();
+            $searchTerm = trim($request->search); // Clean up spaces
+            $searchTerm = str_replace('+', ' ', $searchTerm); // Handle '+' as a space
 
+            // Search for dishes where the name matches the search term (case insensitive)
             $query->where('dish_name', 'like', '%' . strtolower($searchTerm) . '%');
+
+            // dd($query->toSql(), $query->getBindings());
         }
 
         // Get the results

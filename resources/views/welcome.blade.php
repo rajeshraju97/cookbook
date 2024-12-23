@@ -100,7 +100,7 @@
                     <!-- Search Bar -->
                     <div class="uk-width-expand@m">
                         <form class="uk-search uk-search-default uk-width-1-1" method="GET"
-                            action="{{ route('recipes.type') }}">
+                            action="{{ route('recipes.type.welcome') }}">
                             <span data-uk-search-icon></span>
                             <input class="uk-search-input uk-text-small uk-border-rounded uk-form-large" type="search"
                                 name="search" placeholder="Search for recipes..." value="{{ request('search') }}">
@@ -108,7 +108,7 @@
                     </div>
                     <!-- Sort Dropdown -->
                     <div class="uk-width-1-3@m uk-text-right@m uk-light">
-                        <form method="GET" action="{{ route('recipes.type') }}">
+                        <form method="GET" action="{{ route('recipes.type.welcome') }}">
                             <select class="uk-select uk-select-light uk-width-auto uk-border-pill uk-select-primary"
                                 name="sort" onchange="this.form.submit()">
                                 <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Sort by: Latest
