@@ -42,7 +42,6 @@
         });
     </script>
 
-
 </head>
 
 <body>
@@ -116,7 +115,7 @@
             <button class="uk-offcanvas-close" type="button" data-uk-close="ratio: 1.2"></button>
             <ul class="uk-nav uk-nav-primary uk-nav-offcanvas uk-margin-medium-top uk-text-center">
                 <li class="uk-active"><a href="{{url('/')}}">Home</a></li>
-                <li><a href="{{route('recipe')}}">Recipe</a></li>
+                <li><a href="{{route('recipe_index')}}">Recipe</a></li>
                 <li><a href="{{route('search')}}">Search</a></li>
                 <li><a href="{{route('contact')}}">Contact</a></li>
                 <li><a href="{{route('user.register')}}">Register</a></li>
@@ -149,51 +148,52 @@
     <!-- Bootstrap Notify -->
     <script src="{{asset('js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
 
-
-
     <script>
         $(document).ready(function () {
             // Success notification
             @if(session('success'))
+                var content = {
+                    message: "{{ session('success') }}",
+                    title: "Success",
+                    icon: "fa fa-bell"
+                };
 
-                content.message = "{{session('success')}}";
-                content.title = "Success";
-                content.icon = "fa fa-bell";
                 $.notify(content, {
-                    type: state,
+                    type: 'success', // You can change this to match your notification type
                     placement: {
-                        from: placementFrom,
-                        align: placementAlign,
+                        from: 'top', // Correct capitalization
+                        align: 'right' // Correct capitalization
                     },
                     time: 1000,
-                    delay: 0,
+                    delay: 5000, // Adjust delay if needed
                 });
             @endif
 
+
             // Error notification
             @if($errors->any())
-                $.notify(
-                    {
-                        message: "{{ $errors->first() }}",
-                        title: "Error",
-                        icon: "fa fa-exclamation-circle",
+                var content = {
+                    message: "{{ $errors->first() }}",
+                    title: "Error",
+                    icon: "fa fa-exclamation-circle",
+                };
+
+                $.notify(content, {
+                    type: "danger", // Error style
+                    allow_dismiss: true,
+                    delay: 5000,
+                    placement: {
+                        from: "top",
+                        align: "right",
                     },
-                    {
-                        type: "danger", // Error style
-                        allow_dismiss: true,
-                        delay: 5000,
-                        placement: {
-                            from: "top",
-                            align: "right",
-                        },
-                        offset: { x: 20, y: 70 },
-                        animate: {
-                            enter: "animated fadeInDown",
-                            exit: "animated fadeOutUp",
-                        },
-                    }
-                );
+                    offset: { x: 20, y: 70 },
+                    animate: {
+                        enter: "animated fadeInDown",
+                        exit: "animated fadeOutUp",
+                    },
+                });
             @endif
+
         });
     </script>
 

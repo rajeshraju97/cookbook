@@ -22,8 +22,8 @@
                     <ul class="uk-navbar-nav uk-visible@m uk-margin-large-left">
                         <li class="{{ request()->is('/') ? 'uk-active' : '' }}"><a href="{{url('/')}}">Home</a></li>
 
-                        <li class="{{ request()->is('recipe') ? 'uk-active' : '' }}"><a
-                                href="{{route('recipe')}}">Receipes</a></li>
+                        <li class="{{ request()->is('recipe_index') ? 'uk-active' : '' }}"><a
+                                href="{{route('recipe_index')}}">Receipes</a></li>
 
                         <li class="{{ request()->is('search') ? 'uk-active' : '' }}"><a
                                 href="{{route('search')}}">Search</a></li>

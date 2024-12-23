@@ -17,6 +17,8 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('welcome');
+Route::get('/{type_id?}', [HomeController::class, 'index'])->name('recipes.type.welcome');
+
 Route::get('/signin', [UserController::class, 'signin'])->name('user.register');
 Route::post('/signin', [UserController::class, 'register']);
 
@@ -27,10 +29,16 @@ Route::post('/login', [UserController::class, 'login'])->name('user.login');
 
 Route::post('/logout', [UserController::class, 'logout'])->name('user.logout');
 
-Route::get('/recipes', [HomeController::class, 'recipe'])->name('recipe');
+
+
+Route::get('/allrecipes', [HomeController::class, 'recipe_index'])->name('recipe_index');
+// Main route to display recipes
+Route::get('/allrecipes/{type_id?}', [HomeController::class, 'recipe_index'])->name('recipes.type');
+
 Route::get('/recipe/{id}', [HomeController::class, 'recipe_single_page'])->name('recipe_single_page');
 Route::get('/search', [HomeController::class, 'search'])->name('search');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+
 
 
 Route::prefix('user')

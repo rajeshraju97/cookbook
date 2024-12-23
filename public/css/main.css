@@ -12848,3 +12848,33 @@ iframe.uk-cover {
         page-break-after: avoid;
     }
 }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.pagination .page-item {
+    list-style: none;
+}
+
+.pagination .page-link {
+    padding: 10px 15px;
+    background-color: #eb361e;
+    border: 1px solid #ddd;
+    color: #333;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.pagination .page-link:hover {
+    background-color: #eb361e;
+}
+
+.pagination .active .page-link {
+    background-color: #eb361e !important;
+    color: white;
+    border-color: #eb361e !important;
+}
