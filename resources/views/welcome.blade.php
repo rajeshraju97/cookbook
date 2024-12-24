@@ -142,6 +142,8 @@
                                             <span>({{ $dish->reviews_count }})</span>
                                         </div>
                                     </div>
+                                    <a href="{{route('recipe_single_page', $id = $dish->id)}}"
+                                        class="uk-position-cover"></a>
                                 </div>
                             </div>
                         @empty
