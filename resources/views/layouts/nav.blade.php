@@ -10,6 +10,47 @@
     <link href="https://fonts.googleapis.com/css?family=Leckerli+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/main.css')}}" />
     <script src="{{asset('js/main.js')}}"></script>
+    <style>
+        /* Badge styling */
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: red;
+            color: white;
+            font-size: 12px;
+            padding: 3px 6px;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            animation: shake 0.1s ease-in-out;
+        }
+
+        /* Bounce animation for the badge */
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-4px);
+            }
+        }
+
+        /* Trigger animation class */
+        .bounce-once {
+            animation: bounce 0.5s ease-in-out;
+        }
+
+        /* Ensure proper spacing for the cart icon */
+        .cart-container {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+    </style>
+
+
 </head>
 
 <body>
@@ -33,16 +74,7 @@
                     </ul>
                 </div>
                 <div class="uk-navbar-right">
-                    <div>
-                        <a class="uk-navbar-toggle" data-uk-search-icon href="#"></a>
-                        <div class="uk-drop uk-background-default"
-                            data-uk-drop="mode: click; pos: left-center; offset: 0">
-                            <form class="uk-search uk-search-navbar uk-width-1-1">
-                                <input class="uk-search-input uk-text-demi-bold" type="search" placeholder="Search..."
-                                    autofocus>
-                            </form>
-                        </div>
-                    </div>
+
                     @guest('user')
                         <!-- Display when the user is not authenticated -->
                         <ul class="uk-navbar-nav uk-visible@m">
@@ -57,31 +89,42 @@
                     @endguest
 
                     @auth('user')
-                        <!-- Display when the user is authenticated -->
-                        <div class="uk-navbar-item uk-visible@m">
-                            <div class="uk-inline">
-                                <button class="uk-button uk-button-primary" type="button">Dashboard</button>
-                                <div uk-dropdown="mode: hover; delay-hide: 200">
-                                    <ul class="uk-nav uk-dropdown-nav">
-                                        <li><a href="{{ route('user.profile') }}">Profile</a></li>
-                                        <li><a href="{{ route('user.settings') }}">Settings</a></li>
-                                        <li><a href="{{ route('user.dashboard') }}">Dashboard</a></li>
-                                        <li class="uk-nav-divider"></li>
-                                        <li>
-                                            <a href="{{ route('user.logout') }}"
-                                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                                Logout
+                                        <div class="cart-container" style="position: relative; display: inline-block;">
+                                            <a href="{{route('user.cart')}}">
+                                                <span data-uk-icon="icon: cart; ratio: 1.5" class="cart-icon"></span>
+                                                <span class="uk-badge cart-badge">
+                                                    {{ auth('user')->check() ? \App\Models\Order::where([
+                            'user_id' => auth('user')->id(),
+                            'status' => 'cart'
+                        ])->count() : 0 }}
+                                                </span>
                                             </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
 
-                        <!-- Logout Form -->
-                        <form id="logout-form" action="{{ route('user.logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
+                                        </div>
+                                        <!-- Display when the user is authenticated -->
+                                        <div class="uk-navbar-item uk-visible@m">
+                                            <div class="uk-inline">
+                                                <button class="uk-button uk-button-primary"
+                                                    type="button">{{auth('user')->user()->username}}</button>
+                                                <div uk-dropdown="mode: hover; delay-hide: 200">
+                                                    <ul class="uk-nav uk-dropdown-nav">
+                                                        <li><a href="{{ route('user.dashboard') }}">Dashboard</a></li>
+                                                        <li class="uk-nav-divider"></li>
+                                                        <li>
+                                                            <a href="{{ route('user.logout') }}"
+                                                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                                                Logout
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Logout Form -->
+                                        <form id="logout-form" action="{{ route('user.logout') }}" method="POST" class="d-none">
+                                            @csrf
+                                        </form>
                     @endauth
 
 
@@ -94,6 +137,17 @@
         </div>
     </nav>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const cartBadge = document.querySelector('.cart-badge');
+
+            // Trigger the bounce animation every 5 seconds
+            setInterval(() => {
+                cartBadge.classList.add('bounce-once');
+                setTimeout(() => cartBadge.classList.remove('bounce-once'), 500);
+            }, 5000);
+        });
+    </script>
 </body>
 
 </html>

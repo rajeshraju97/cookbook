@@ -2,26 +2,27 @@
 <html lang="en-gb" dir="ltr">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
     <title>@yield('title', 'Cookbook')</title>
     <link rel="shortcut icon" type="image/png" href="img/favicon.png">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Leckerli+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/main.css')}}" />
     <script src="{{asset('js/main.js')}}"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
 
+
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}" />
+    <link rel="stylesheet" href="{{asset('css/plugins.min.css')}}" />
+
+
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link rel="stylesheet" href="{{asset('css/demo.css')}}" />
     <!-- Add these to your main layout (e.g., app.blade.php) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
-    <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}" />
 
     <script src="{{asset('js/plugin/webfont/webfont.min.js')}}"></script>
     <script>
@@ -118,12 +119,43 @@
                 <li><a href="{{route('recipe_index')}}">Recipe</a></li>
                 <li><a href="{{route('search')}}">Search</a></li>
                 <li><a href="{{route('contact')}}">Contact</a></li>
-                <li><a href="{{route('user.register')}}">Register</a></li>
-                <li><a href="{{route('user.login')}}">Login</a></li>
+                @guest('user')
+                    <li><a href="{{route('user.register')}}">Register</a></li>
+                    <li><a href="{{route('user.login')}}">Login</a></li>
+                @endguest
+
             </ul>
-            <div class="uk-margin-medium-top">
-                <a class="uk-button uk-width-1-1 uk-button-primary" href="{{route('user.login')}}">Login</a>
-            </div>
+            @guest('user')
+                <div class="uk-margin-medium-top">
+                    <a class="uk-button uk-width-1-1 uk-button-primary" href="{{route('user.login')}}">Login</a>
+                </div>
+            @endguest
+            @auth('user')
+                <!-- Display when the user is authenticated -->
+                <div class="uk-margin-medium-top">
+
+                    <button class="uk-button uk-width-1-1 uk-button-primary"
+                        type="button">{{auth('user')->user()->username}}</button>
+                    <div uk-dropdown="mode: hover; delay-hide: 200">
+                        <ul class="uk-nav uk-dropdown-nav">
+                            <li><a href="{{ route('user.dashboard') }}">Dashboard</a></li>
+                            <li class="uk-nav-divider"></li>
+                            <li>
+                                <a href="{{ route('user.logout') }}"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <!-- Logout Form -->
+                <form id="logout-form" action="{{ route('user.logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
+            @endauth
             <div class="uk-margin-medium-top uk-text-center">
                 <div data-uk-grid class="uk-child-width-auto uk-grid-small uk-flex-center">
                     <div>
@@ -144,9 +176,10 @@
     </div>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <!-- Bootstrap Notify -->
-    <script src="{{asset('js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
+
+    <!-- Bootstrap Bundle JS (includes Popper.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 
     <script>
         $(document).ready(function () {
@@ -168,8 +201,6 @@
                     delay: 5000, // Adjust delay if needed
                 });
             @endif
-
-
             // Error notification
             @if($errors->any())
                 var content = {
@@ -196,6 +227,43 @@
 
         });
     </script>
+
+    <!--   Core JS Files   -->
+    <script src="{{asset('js/core/jquery-3.7.1.min.js')}}"></script>
+    <script src="{{asset('js/core/popper.min.js')}}"></script>
+    <script src="{{asset('js/core/bootstrap.min.js')}}"></script>
+
+    <!-- jQuery Scrollbar -->
+    <script src="{{asset('js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')}}"></script>
+
+    <!-- Chart JS -->
+    <script src="{{asset('js/plugin/chart.js/chart.min.js')}}"></script>
+
+    <!-- jQuery Sparkline -->
+    <script src="{{asset('js/plugin/jquery.sparkline/jquery.sparkline.min.js')}}"></script>
+
+    <!-- Chart Circle -->
+    <script src="{{asset('js/plugin/chart-circle/circles.min.js')}}"></script>
+
+    <!-- Datatables -->
+    <script src="{{asset('js/plugin/datatables/datatables.min.js')}}"></script>
+
+    <!-- Bootstrap Notify -->
+    <script src="{{asset('js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
+
+    <!-- jQuery Vector Maps -->
+    <script src="{{asset('js/plugin/jsvectormap/jsvectormap.min.js')}}"></script>
+    <script src="{{asset('js/plugin/jsvectormap/world.js')}}"></script>
+
+    <!-- Sweet Alert -->
+    <script src="{{asset('js/plugin/sweetalert/sweetalert.min.js')}}"></script>
+
+    <!-- Kaiadmin JS -->
+    <script src="{{asset('js/kaiadmin.min.js')}}"></script>
+
+    <!-- Kaiadmin DEMO methods, don't include it in your project! -->
+    <script src="{{asset('js/setting-demo.js')}}"></script>
+    <script src="{{asset('js/demo.js')}}"></script>
 
 
 

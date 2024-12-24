@@ -158,27 +158,6 @@
 </style>
 
 <div class="uk-container">
-    @if(session('status') == 'success')
-        <script>
-            Toastify({
-                text: "{{ session('message') }}",
-                duration: 3000, // Duration in milliseconds
-                gravity: "top", // `top` or `bottom`
-                position: 'right', // `left`, `center` or `right`
-                backgroundColor: "#88C273", // Customize background color
-            }).showToast();
-        </script>
-    @endif
-
-    @if ($errors->any())
-        <div class="col-md-12 col-lg-12">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
     <div data-uk-grid>
         <div class="uk-width-1-2@s">
             <div><img class="uk-border-rounded-large" src="{{asset('dishes_images/' . $dish->dish_image)}}"
