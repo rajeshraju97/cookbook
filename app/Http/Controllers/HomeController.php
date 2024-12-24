@@ -57,7 +57,7 @@ class HomeController extends Controller
         }
 
         // Paginate the results (use the same query that has filtering and sorting applied)
-        $dishes = $query->paginate(1);
+        $dishes = $query->paginate(10);
 
         // Pass data to the view
         return view('welcome', [
@@ -83,7 +83,7 @@ class HomeController extends Controller
 
     public function recipe_index(Request $request, $type_id = null)
     {
-        // Fetch categories and dish types
+        // Fetch categories and group them by category name
         $categories = DishType::all()->groupBy('category_name');
 
         // Determine the default type_id if not provided
@@ -95,7 +95,7 @@ class HomeController extends Controller
         // Get dishes for the selected type or all dishes if no type is selected
         $query = Dishes::query();
 
-        // Check if a valid dish type ID is provided
+        // If a valid dish type ID is provided, filter by dish type
         if ($type_id && is_numeric($type_id)) {
             $query->where('dish_type_id', $type_id);
         }
@@ -112,10 +112,7 @@ class HomeController extends Controller
             // dd($query->toSql(), $query->getBindings());
         }
 
-        // Get the results
-        $dishes = $query->get();
-
-        // Apply sorting
+        // Apply sorting if provided
         if ($request->has('sort')) {
             switch ($request->sort) {
                 case 'top_rated':
@@ -129,8 +126,8 @@ class HomeController extends Controller
             }
         }
 
-        // Paginate results
-        $dishes = $query->paginate(1);
+        // Paginate the results (use the same query that has filtering and sorting applied)
+        $dishes = $query->paginate(10);
 
         // Pass data to the view
         return view('user.recipes', [
@@ -142,10 +139,36 @@ class HomeController extends Controller
 
 
 
-    public function search()
+    public function search(Request $request)
     {
-        return view('user.search');
+        $query = Dishes::query();
+
+        // Handle Search
+        if ($request->has('search')) {
+            $query->where('dish_name', 'like', '%' . $request->search . '%');
+        }
+
+        // Handle Sorting
+        if ($request->has('sort')) {
+            switch ($request->sort) {
+                case 'top_rated':
+                    $query->orderBy('rating', 'desc');
+                    break;
+                case 'trending':
+                    $query->orderBy('popularity', 'desc');
+                    break;
+                default:
+                    $query->orderBy('created_at', 'desc');
+            }
+        }
+
+        // Get Results with Pagination
+        $dishes = $query->paginate(15);
+
+        // Pass Data to View
+        return view('user.search', compact('dishes'));
     }
+
 
     public function contact()
     {
