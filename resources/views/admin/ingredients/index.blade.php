@@ -95,6 +95,7 @@
                                         <th>ID</th>
                                         <th>Dish Name</th>
                                         <th>Ingredients</th>
+                                        <th>No Of Members</th>
                                         <th style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
@@ -114,6 +115,7 @@
                                                 @endforeach
                                             </ul>
                                         </td>
+                                        <td>{{ $dish->no_of_members }}</td>
                                         <td>
                                             <div class="form-button-action">
 
@@ -129,12 +131,14 @@
                                                 </button>
 
                                                 <form action="{{ route('admin.ingredients.destroy', $dish->id) }}"
-                                                    method="POST" style="display:inline;">
+                                                    method="POST" class="delete-form" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" data-bs-toggle="tooltip" title=""
-                                                        class="btn btn-link btn-danger" data-original-title="Remove">
-                                                        <i class="fas fa-times"></i>
+                                                    <button type="button"
+                                                        class="btn btn-link btn-danger btn-lg delete-btn"
+                                                        data-url="{{ route('admin.ingredients.destroy', $dish->id) }}"
+                                                        data-bs-toggle="tooltip" title="Delete">
+                                                        <i class="fa fa-times"></i>
                                                     </button>
                                                 </form>
                                             </div>
@@ -156,6 +160,7 @@
 <script src="{{asset('js/core/jquery-3.7.1.min.js')}}"></script>
 <!-- Datatables -->
 <script src="{{asset('js/plugin/datatables/datatables.min.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     $(document).ready(function () {
         // Add Row
@@ -187,7 +192,7 @@
                     .then(data => {
                         // Populate modal fields
                         document.getElementById('dishName').textContent = data.dish_name;
-                        document.getElementById('dishType').textContent = data.dish_type.type_name;
+                        document.getElementById('dishType').textContent = data.dish_type;
                         document.getElementById('dishDescription').textContent = data.dish_description;
                         document.getElementById('dishImage').src = `/dishes_images/${data.dish_image}`;
                     })
@@ -219,14 +224,14 @@
                     if (result.isConfirmed) {
                         Swal.fire(
                             "Deleted!",
-                            "Your dish type has been deleted.",
+                            "Your Dish Ingredients has been deleted.",
                             "success"
                         );
                         form.submit(); // Submit the form if confirmed
                     } else if (result.dismiss === Swal.DismissReason.cancel) {
                         Swal.fire(
                             "Cancelled",
-                            "Your dish type is safe!",
+                            "Your Dish Ingredients  is safe!",
                             "error"
                         );
                     }

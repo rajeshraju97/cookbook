@@ -81,8 +81,16 @@ class IngredientController extends Controller
      */
     public function show(Ingredient $ingredient)
     {
-        return view('admin.ingredients.show', compact('ingredient'));
+        $ingredient->load('dishes'); // Load related models
+        return response()->json([
+            'dish_name' => $ingredient->dishes->dish_name,
+            'dish_type' => $ingredient->dishes->dishType->type_name,
+            'dish_description' => $ingredient->dishes->dish_description,
+            'dish_image' => $ingredient->dishes->dish_image,
+        ]);
     }
+
+
 
     /**
      * Show the form for editing the specified resource.

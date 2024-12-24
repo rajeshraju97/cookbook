@@ -231,14 +231,14 @@
                     if (result.isConfirmed) {
                         Swal.fire(
                             "Deleted!",
-                            "Your dish type has been deleted.",
+                            "Your dish has been deleted.",
                             "success"
                         );
                         form.submit(); // Submit the form if confirmed
                     } else if (result.dismiss === Swal.DismissReason.cancel) {
                         Swal.fire(
                             "Cancelled",
-                            "Your dish type is safe!",
+                            "Your dish is safe!",
                             "error"
                         );
                     }

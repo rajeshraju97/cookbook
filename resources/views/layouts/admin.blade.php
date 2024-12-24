@@ -109,9 +109,9 @@
 
                         </li>
                         <li class="nav-item">
-                            <a href="#forms">
+                        <a href="{{route('admin.orders.index')}}">
                                 <i class="fas fa-pen-square"></i>
-                                <p>Forms</p>
+                                <p>Ordes</p>
                                 <span class="caret"></span>
                             </a>
 

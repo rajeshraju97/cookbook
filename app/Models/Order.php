@@ -21,4 +21,15 @@ class Order extends Model
     {
         return $this->belongsTo(Dishes::class, 'dish_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+
+    public function user_address()
+    {
+        return $this->belongsTo(UserAddress::class, 'user_id');
+    }
 }

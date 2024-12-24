@@ -138,8 +138,10 @@ class CheckoutController extends Controller
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
 
+        $order->status = "Cancelled";
+
         // Delete the item
-        $order->delete();
+        $order->save();
 
         // Redirect back with a success message
         return redirect()->back()->with('success', 'Item removed from your cart!');

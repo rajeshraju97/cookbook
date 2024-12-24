@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\IngredientController;
 use App\Http\Controllers\Auth\AdminController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 
 
 
@@ -79,6 +80,7 @@ Route::prefix('admin')
         Route::resource('ingredients', IngredientController::class);
         Route::resource('dish_type', DishtypeController::class);
         Route::resource('dishes', DishesController::class);
+        Route::resource('orders', AdminOrderController::class);
     });
 
 
