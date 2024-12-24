@@ -81,6 +81,7 @@ Route::prefix('admin')
         Route::resource('dish_type', DishtypeController::class);
         Route::resource('dishes', DishesController::class);
         Route::resource('orders', AdminOrderController::class);
+        Route::get('/transaction', [AdminDashboardController::class, 'razorpay_transactions'])->name('razorpay_transactions');
     });
 
 

@@ -117,6 +117,14 @@
 
                         </li>
 
+                        <li class="nav-item">
+                        <a href="{{route('admin.razorpay_transactions')}}">
+                                <i class="fas fa-coins"></i>
+                                <p>Transactions</p>
+                            </a>
+
+                        </li>
+
                     </ul>
                 </div>
             </div>
