@@ -34,7 +34,7 @@
                 .then((data) => {
                     if (data.success) {
                         // Redirect to order-confirmation page
-                        window.location.href = "user/order-confirmation";
+                        window.location.href = "/order-confirmation";
                     } else {
                         alert("Failed to update order status. Please contact support.");
                     }

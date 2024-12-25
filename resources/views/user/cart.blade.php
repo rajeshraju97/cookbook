@@ -450,29 +450,49 @@
     <div class="row">
         <div class="left-panel col-12 col-lg-8">
             <h2 style="margin-bottom: 1rem; font-size: 1.5rem; font-weight: bold;">Your Dishes</h2>
-            @forelse ($cartItems as $item)
-                <div
-                    style="display: flex; gap: 1rem; margin-bottom: 1rem; padding: 1rem; background: #fff; border: 1px solid #ddd; border-radius: 8px; align-items: center;">
-                    <img src="{{ asset('dishes_images/' . $item->dishes->dish_image) }}"
-                        alt="{{ $item->dishes->dish_name }}"
-                        style="width: 80px; height: 80px; border-radius: 8px; object-fit: cover;">
-                    <div style="flex-grow: 1;">
-                        <h3 style="margin: 0; font-size: 1.2rem;">{{ $item->dishes->dish_name }}</h3>
-                    </div>
-                    <!-- Delete Button -->
-                    <form action="{{ route('user.cart.destroy', $item->id) }}" method="POST" style="margin: 0;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit"
-                            style="background: #e74c3c; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </form>
-                </div>
-            @empty
-                <p>No items in your cart!</p>
-            @endforelse
+            @foreach ($cartItems as $item)
+                        <div
+                            style="display: flex; gap: 1rem; margin-bottom: 1rem; padding: 1rem; background: #fff; border: 1px solid #ddd; border-radius: 8px; align-items: center;">
+                            <img src="{{ asset('dishes_images/' . $item->dishes->dish_image) }}"
+                                alt="{{ $item->dishes->dish_name }}"
+                                style="width: 80px; height: 80px; border-radius: 8px; object-fit: cover;">
+                            <div style="flex-grow: 1;">
+                                <h3 style="margin: 0; font-size: 1.2rem;">{{ $item->dishes->dish_name }}</h3>
+
+                                @php
+                                    // Decode the ingredients JSON string to a PHP array
+                                    $ingredients = json_decode($item->ingredients);
+                                @endphp
+
+                                <p style="font-size: 0.9rem; color: #666;">
+                                    <span style="font-weight:bold;">Ingredients:</span>
+                                    @if($ingredients && is_array($ingredients))
+                                        @foreach($ingredients as $ingredient)
+                                            <span>{{ $ingredient->name }}</span>
+                                            @if(!$loop->last), @endif
+                                        @endforeach
+                                    @else
+                                        No custom ingredients
+                                    @endif
+                                </p>
+                            </div>
+                            <div>
+                                <!-- Quantity or price can go here if needed -->
+                            </div>
+                            <!-- Delete Button -->
+                            <form action="{{ route('user.cart.destroy', $item->id) }}" method="POST" style="margin: 0;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                    style="background: #e74c3c; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </form>
+                        </div>
+            @endforeach
+
         </div>
+
 
 
         <!-- Right Panel: Total Amount -->
@@ -647,6 +667,58 @@
                             </div>
                         </div>
 
+                        <!-- available coupons modal -->
+                        <div class="modal fade" id="couponModal" tabindex="-1" aria-labelledby="couponModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="couponModalLabel">Available Coupons</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- Unused Coupons -->
+                                        <h6>Unused Coupons:</h6>
+                                        <ul>
+                                            @if($unusedCoupons->isNotEmpty())
+                                                @foreach($unusedCoupons as $coupon)
+                                                    <li class="py-2">
+                                                        <strong>{{ $coupon->code }}</strong>:
+                                                        {{ $coupon->type === 'percentage' ? $coupon->value . '%' : '₹' . $coupon->value }}
+                                                        off
+                                                        (Min Order: ₹{{ $coupon->minimum_order_value ?? 0 }})
+                                                        <button class="btn btn-success btn-sm"
+                                                            onclick="applyCoupon('{{ $coupon->code }}')">Apply</button>
+                                                    </li>
+                                                @endforeach
+                                            @else
+                                                <li>No unused coupons available.</li>
+                                            @endif
+                                        </ul>
+
+                                        <!-- Used Coupons -->
+                                        <h6 class="mt-4">Used Coupons:</h6>
+                                        <ul>
+                                            @if($usedCoupons->isNotEmpty())
+                                                @foreach($usedCoupons as $coupon)
+                                                    <li class="py-2">
+                                                        <strong>{{ $coupon->code }}</strong>:
+                                                        {{ $coupon->type === 'percentage' ? $coupon->value . '%' : '₹' . $coupon->value }}
+                                                        off
+                                                        (Min Order: ₹{{ $coupon->minimum_order_value ?? 0 }})
+                                                        <span class="badge bg-secondary">Used</span>
+                                                    </li>
+                                                @endforeach
+                                            @else
+                                                <li>No used coupons.</li>
+                                            @endif
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
 
                     </div>
 
@@ -656,7 +728,7 @@
                         <div class="address-list">
                             @if ($addresses->isNotEmpty())
                                 @foreach ($addresses as $address)
-                                    <div class="address-card {{ session('selected_address')['id'] == $address->id ? 'selected' : '' }}">
+                                    <div class="address-card">
                                         <div class="address-details">
                                             <strong>{{ $address->label }}</strong>
                                             <p>{{ $address->address_line_1 }}, {{ $address->address_line_2 }},
@@ -700,18 +772,22 @@
                         <div class="steps">
                             <div class="step">
                                 <div class="promo">
-                                    <span>HAVE A PROMO CODE?</span>
-                                    <form class="form">
-                                        <input class="input_field" placeholder="Enter a Promo Code" type="text">
-                                        <button class="button-30" role="button">Apply</button>
-                                    </form>
+                                    <div class="available-coupons">
+                                        <h4 style="color:white;">Available Coupons:</h4>
+                                        <!-- Modal Trigger -->
+                                        <button type="button" class="button-30" data-bs-toggle="modal"
+                                            data-bs-target="#couponModal">
+                                            View Available Coupons
+                                        </button>
+                                    </div>
+
                                 </div>
                                 <hr>
                                 <div class="payments">
                                     <span>PAYMENT</span>
                                     <div class="details">
                                         <span>Subtotal:</span>
-                                        <span id="total-amount">₹{{ number_format($cartItems->sum('total_amount'), 2) }}</span>
+                                        <span id="total-amount">₹{{ number_format($cartTotal, 2) }}</span>
                                         <span>Shipping:</span>
                                         <span>₹50.00</span>
                                         <span>Tax:</span>
@@ -727,8 +803,8 @@
                             <form action="{{ route('user.checkout') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="order_ids" value="{{ $cartItems->pluck('id')->join(',') }}">
-                                <input type="hidden" name="total_amount"
-                                    value="{{  number_format($cartItems->sum('total_amount') + 50 + 30.40, 2) }}">
+                                <input type="hidden" name="total_amount" id="total-amount2"
+                                    value="{{  number_format($cartTotal + 50 + 30.40, 2) }}">
 
                                 <div style="margin-bottom: 1rem;">
                                     <h4>Select Payment Method</h4>
@@ -751,7 +827,7 @@
                                 </div>
 
                                 <label class="price" style="margin-right: 12pc;">
-                                    Total: ₹{{ number_format($cartItems->sum('total_amount') + 50 + 30.40, 2) }}
+                                    Total: <span id="total-amount3">₹{{ number_format($cartTotal + 50 + 30.40, 2) }}</span>
                                 </label>
 
                                 <button type="submit" class="button-30" role="button">Checkout</button>
@@ -819,14 +895,14 @@
                     time: 1000,
                     delay: 5000,
                 });
+
+
             })
             .catch((error) => {
                 console.error('Error:', error.message);
                 alert('Unable to update the default address. Please try again.');
             });
     }
-
-
 
 
     function openEditModal(address) {
@@ -856,6 +932,110 @@
     }
 
 
+    function applyCoupon(code) {
+        fetch('/user/apply-coupon', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            },
+            body: JSON.stringify({ promo_code: code }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Close the modal
+                    const modalElement = document.getElementById('couponModal');
+                    const modal = bootstrap.Modal.getInstance(modalElement);
+                    modal.hide();
+
+                    // Success notification
+                    var content = {
+                        message: `Coupon applied! Discount: ₹${data.discount}`,
+                        title: "Success",
+                        icon: "fa fa-bell",
+                    };
+
+                    $.notify(content, {
+                        type: 'success',
+                        placement: {
+                            from: 'top',
+                            align: 'right',
+                        },
+                        time: 1000,
+                        delay: 5000, // Notification delay
+                        onClosed: function () {
+                            // Reload the page after the notification is closed
+                            location.reload();
+                        },
+                    });
+                } else {
+                    // Warning notification
+                    var content = {
+                        message: `<strong>${data.message}</strong>`,
+                        title: "Warning",
+                        icon: "fa fa-exclamation-circle",
+                    };
+
+                    $.notify(content, {
+                        type: "danger", // Error style
+                        allow_dismiss: true,
+                        delay: 5000,
+                        placement: {
+                            from: "top",
+                            align: "right",
+                        },
+                        offset: { x: 20, y: 70 },
+                        animate: {
+                            enter: "animated fadeInDown",
+                            exit: "animated fadeOutUp",
+                        },
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+
+                // Handle fetch error
+                var content = {
+                    message: "<strong>Something went wrong. Please try again.</strong>",
+                    title: "Error",
+                    icon: "fa fa-exclamation-circle",
+                };
+
+                $.notify(content, {
+                    type: "danger",
+                    allow_dismiss: true,
+                    delay: 5000,
+                    placement: {
+                        from: "top",
+                        align: "right",
+                    },
+                    offset: { x: 20, y: 70 },
+                    animate: {
+                        enter: "animated fadeInDown",
+                        exit: "animated fadeOutUp",
+                    },
+                });
+            });
+    }
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const newTotal = "{{ session('new_total', '') }}";
+        const shipping = 50; // Shipping charge
+        const tax = 30.40;  // Tax charge
+
+
+        console.log(newTotal);
+
+        if (newTotal) {
+            const finalTotal = parseFloat(newTotal) + shipping + tax;
+            document.getElementById('total-amount').innerText = `₹${parseFloat(newTotal).toFixed(2)}`;
+            document.getElementById('total-amount2').value = finalTotal;
+            document.getElementById('total-amount3').innerText = `₹${finalTotal.toFixed(2)}`;
+        }
+    });
 
     // Additional modal logic
     $(document).ready(function () {

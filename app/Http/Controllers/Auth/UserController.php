@@ -139,21 +139,22 @@ class UserController extends Controller
             ->where('user_id', $user_id)
             ->firstOrFail();
 
-        // If the user wants to set a new default address, unset the previous default address
         if ($request->is_default) {
             // Set the current address as default and unset all others
             UserAddress::where('user_id', $user_id)->update(['is_default' => false]);
             $address->is_default = true;
             $address->save();
-
-            return response()->json(['message' => 'Address set as default!']);
         } else {
             // Remove default status from the current address
             $address->is_default = false;
             $address->save();
-
-            return response()->json(['message' => 'Default address removed!']);
         }
+
+        // Save selected address to user's session or orders table
+        session(['selected_address' => $address->toArray()]);
+
+        $message = $request->is_default ? 'Address set as default!' : 'Default address removed!';
+        return response()->json(['message' => $message]);
     }
 
 

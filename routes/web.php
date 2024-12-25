@@ -50,6 +50,7 @@ Route::prefix('user')
         Route::post('/address/edit', [UserController::class, 'editAddress'])->name('address.edit');
         Route::post('/address/select', [UserController::class, 'selectAddress'])->name('address.select');
 
+        Route::post('/apply-coupon', [CheckoutController::class, 'applyCoupon'])->name('applyCoupon');
         Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
         Route::get('/order-confirmation', function () {
             return view('user.order-confirmation');

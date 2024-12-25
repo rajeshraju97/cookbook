@@ -6,11 +6,56 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Razorpay\Api\Api;
 use App\Models\Order;
+use App\Models\Coupon;
 use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller
 {
     //
+
+    public function applyCoupon(Request $request)
+    {
+        $request->validate(['promo_code' => 'required|string']);
+
+        $user = Auth::guard('user')->user();
+        $coupon = Coupon::where('code', $request->promo_code)
+            ->where('active', true)
+            ->whereDate('expiry_date', '>=', now())
+            ->first();
+
+        if (!$coupon) {
+            return response()->json(['success' => false, 'message' => 'Invalid or expired coupon.']);
+        }
+
+        $alreadyUsed = $user->couponUsages()->where('coupon_id', $coupon->id)->exists();
+
+        if ($alreadyUsed) {
+            return response()->json(['success' => false, 'message' => 'You have already used this coupon.']);
+        }
+
+        $cartTotal = session('new_total');
+        if ($coupon->minimum_order_value && $cartTotal < $coupon->minimum_order_value) {
+            return response()->json(['success' => false, 'message' => 'Cart total is less than the minimum required.']);
+        }
+
+        $discount = $coupon->type === 'percentage'
+            ? ($cartTotal * ($coupon->value / 100))
+            : $coupon->value;
+
+        $newTotal = max(0, $cartTotal - $discount);
+
+        // Save coupon usage
+        $user->couponUsages()->create(['coupon_id' => $coupon->id]);
+
+        session(['coupon_discount' => $discount, 'new_total' => $newTotal]);
+
+        return response()->json([
+            'success' => true,
+            'discount' => $discount,
+            'new_total' => $newTotal,
+        ]);
+    }
+
 
     public function checkout(Request $request)
     {
@@ -18,10 +63,15 @@ class CheckoutController extends Controller
             "payment_method" => "required",
             'total_amount' => "required",
         ]);
+        // dd($request->total_amount);
         $user = Auth::guard('user')->user();
         $orderIds = explode(',', $request->input('order_ids'));
         $paymentMethod = $request->input('payment_method');
-        $totalAmount = intval(round(($request->input('total_amount') * 100)));
+        $totalAmountInput = $request->input('total_amount');
+
+        // Remove commas or non-numeric characters
+        $totalAmount = intval(round((float) str_replace(',', '', $totalAmountInput) * 100));
+
 
         $selected_address = session('selected_address');
 

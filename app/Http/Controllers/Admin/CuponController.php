@@ -72,6 +72,7 @@ class CuponController extends Controller
     {
         // Validate the request
         $request->validate([
+            'code' => 'required|String',
             'type' => 'required|string|in:percentage,fixed',
             'value' => 'required|numeric|min:0',
             'minimum_order_value' => 'required|numeric|min:0',
@@ -83,6 +84,7 @@ class CuponController extends Controller
         $coupon = Coupon::findOrFail($id);
 
         // Update the coupon attributes
+        $coupon->code = $request->input('code');
         $coupon->type = $request->input('type');
         $coupon->value = $request->input('value');
         $coupon->minimum_order_value = $request->input('minimum_order_value');
