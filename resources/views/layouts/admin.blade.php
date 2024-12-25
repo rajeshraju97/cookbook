@@ -109,7 +109,7 @@
 
                         </li>
                         <li class="nav-item">
-                        <a href="{{route('admin.orders.index')}}">
+                            <a href="{{route('admin.orders.index')}}">
                                 <i class="fas fa-pen-square"></i>
                                 <p>Ordes</p>
                                 <span class="caret"></span>
@@ -118,9 +118,17 @@
                         </li>
 
                         <li class="nav-item">
-                        <a href="{{route('admin.razorpay_transactions')}}">
+                            <a href="{{route('admin.razorpay_transactions')}}">
                                 <i class="fas fa-coins"></i>
                                 <p>Transactions</p>
+                            </a>
+
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{route('admin.coupons.index')}}">
+                                <i class="fas fa-coins"></i>
+                                <p>Cupons</p>
                             </a>
 
                         </li>

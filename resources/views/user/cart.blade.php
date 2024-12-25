@@ -286,6 +286,163 @@
     }
 </style>
 
+<style>
+    .address-container {
+        padding: 1.5rem;
+        width: 100%;
+        background: #FF7D29;
+        box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
+        border-radius: 19px 19px 0px 0px;
+
+    }
+
+    .title {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .address-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .address-card {
+        padding: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: box-shadow 0.3s ease;
+    }
+
+    .address-card.selected {
+        border-color: #007bff;
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
+    }
+
+    .address-details {
+        max-width: 70%;
+        color: #ffffff;
+    }
+
+    .address-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .button-small {
+        background-color: #f8f9fa;
+        border: 1px solid #ddd;
+        padding: 0.4rem 0.8rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .button-small:hover {
+        background-color: #e2e6ea;
+    }
+
+    .button-primary {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    .button-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .button-danger {
+        background-color: #dc3545;
+        color: #fff;
+        border: none;
+    }
+
+    .button-danger:hover {
+        background-color: #bd2130;
+    }
+
+    .address-label.active-label {
+        border: 2px solid #007bff;
+        border-radius: 8px;
+        background-color: #e7f1ff;
+    }
+</style>
+
+<style>
+    .checkbox-wrapper-22 .switch {
+        display: inline-block;
+        height: 34px;
+        position: relative;
+        width: 60px;
+    }
+
+    .checkbox-wrapper-22 .switch input {
+        display: none;
+    }
+
+    .checkbox-wrapper-22 .slider {
+        background-color: #ccc;
+        bottom: 0;
+        cursor: pointer;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        transition: .4s;
+    }
+
+    .checkbox-wrapper-22 .slider:before {
+        background-color: #fff;
+        bottom: 4px;
+        content: "";
+        height: 26px;
+        left: 4px;
+        position: absolute;
+        transition: .4s;
+        width: 26px;
+    }
+
+    .checkbox-wrapper-22 input:checked+.slider {
+        background-color: #66bb6a;
+    }
+
+    .checkbox-wrapper-22 input:checked+.slider:before {
+        transform: translateX(26px);
+    }
+
+    .checkbox-wrapper-22 .slider.round {
+        border-radius: 34px;
+    }
+
+    .checkbox-wrapper-22 .slider.round:before {
+        border-radius: 50%;
+    }
+
+    .checkbox-wrapper-22 {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 10px;
+    }
+
+    .checkbox-wrapper-22 small {
+        font-size: 0.85rem;
+        color: #6c757d;
+        margin-top: 5px;
+    }
+</style>
+
+
+
 
 
 <div class="container-fluid">
@@ -320,190 +477,292 @@
 
         <!-- Right Panel: Total Amount -->
         @if ($cartItems->isNotEmpty())
-            <div class="right-panel col-12 col-lg-4">
+                <div class="right-panel col-12 col-lg-4">
 
-                <div class="card-body">
-                    <!-- Modal -->
-                    <div class="modal fade" id="addRowModal" tabindex="-1" role="dialog" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header border-0">
-                                    <h5 class="modal-title">
-                                        <span class="fw-bold">Add Address</span>
-                                    </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form action="{{route('user.address.add')}}" method="post">
-                                        @csrf
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <div class="form-group mb-3">
-                                                    <label class="mb-2">Address Label</label>
-                                                    <div class="d-flex gap-2 flex-wrap">
-                                                        <!-- Modern Styled Radio Buttons -->
-                                                        <div class="form-check form-check-inline address-label">
-                                                            <input type="radio" id="home" name="label" value="Home"
-                                                                class="form-check-input">
-                                                            <label class="form-check-label" for="home">
-                                                                <i class="fas fa-home me-2"></i> Home
-                                                            </label>
-                                                        </div>
-                                                        <div class="form-check form-check-inline address-label">
-                                                            <input type="radio" id="work" name="label" value="Work"
-                                                                class="form-check-input">
-                                                            <label class="form-check-label" for="work">
-                                                                <i class="fas fa-briefcase me-2"></i> Work
-                                                            </label>
-                                                        </div>
-                                                        <div class="form-check form-check-inline address-label">
-                                                            <input type="radio" id="office" name="label" value="Office"
-                                                                class="form-check-input">
-                                                            <label class="form-check-label" for="office">
-                                                                <i class="fas fa-building me-2"></i> Office
-                                                            </label>
-                                                        </div>
-                                                        <div class="form-check form-check-inline address-label">
-                                                            <input type="radio" id="other" name="label" value="Other"
-                                                                class="form-check-input">
-                                                            <label class="form-check-label" for="other">
-                                                                <i class="fas fa-ellipsis-h me-2"></i> Other
-                                                            </label>
+                    <div class="card-body">
+                        <!-- Add Address Modal -->
+                        <div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header border-0">
+                                        <h5 class="modal-title">
+                                            <span class="fw-bold">Add Address</span>
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{{route('user.address.add')}}" method="post">
+                                            @csrf
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="form-group mb-3">
+                                                        <label class="mb-2">Address Label</label>
+                                                        <div class="d-flex gap-2 flex-wrap">
+                                                            <!-- Modern Styled Radio Buttons -->
+                                                            <div class="form-check form-check-inline address-label">
+                                                                <input type="radio" id="home" name="label" value="Home"
+                                                                    class="form-check-input">
+                                                                <label class="form-check-label" for="home">
+                                                                    <i class="fas fa-home me-2"></i> Home
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline address-label">
+                                                                <input type="radio" id="work" name="label" value="Work"
+                                                                    class="form-check-input">
+                                                                <label class="form-check-label" for="work">
+                                                                    <i class="fas fa-briefcase me-2"></i> Work
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline address-label">
+                                                                <input type="radio" id="office" name="label" value="Office"
+                                                                    class="form-check-input">
+                                                                <label class="form-check-label" for="office">
+                                                                    <i class="fas fa-building me-2"></i> Office
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline address-label">
+                                                                <input type="radio" id="other" name="label" value="Other"
+                                                                    class="form-check-input">
+                                                                <label class="form-check-label" for="other">
+                                                                    <i class="fas fa-ellipsis-h me-2"></i> Other
+                                                                </label>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="form-group mb-3">
-                                                    <label>Address Line 1</label>
-                                                    <input name="address_line_1" type="text" class="form-control"
-                                                        placeholder="Enter Address Line 1">
+                                                    <div class="form-group mb-3">
+                                                        <label>Address Line 1</label>
+                                                        <input name="address_line_1" type="text" class="form-control"
+                                                            placeholder="Enter Address Line 1">
+                                                    </div>
+                                                    <div class="form-group mb-3">
+                                                        <label>Address Line 2</label>
+                                                        <input name="address_line_2" type="text" class="form-control"
+                                                            placeholder="Enter Address Line 2">
+                                                    </div>
+                                                    <div class="form-group mb-3">
+                                                        <label>City</label>
+                                                        <input name="city" type="text" class="form-control"
+                                                            placeholder="Enter City">
+                                                    </div>
+                                                    <div class="form-group mb-3">
+                                                        <label>Pincode</label>
+                                                        <input name="pincode" type="number" class="form-control"
+                                                            placeholder="Enter Pincode">
+                                                    </div>
                                                 </div>
-                                                <div class="form-group mb-3">
-                                                    <label>Address Line 2</label>
-                                                    <input name="address_line_2" type="text" class="form-control"
-                                                        placeholder="Enter Address Line 2">
+                                            </div>
+
+                                            <div class="modal-footer border-0">
+                                                <button type="submit" class="btn btn-primary w-100 py-2">
+                                                    Add Address
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Edit Address Modal -->
+                        <div class="modal fade" id="editAddressModal" tabindex="-1" aria-labelledby="editAddressModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form id="editAddressForm" method="POST" action="{{ route('user.address.edit') }}">
+                                        @csrf
+                                        <input type="hidden" name="address_id" id="edit_address_id">
+
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editAddressModalLabel">Edit Address</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <!-- Label Section -->
+                                            <div class="form-group mb-3">
+                                                <label class="mb-2">Address Label</label>
+                                                <div class="d-flex gap-2 flex-wrap">
+                                                    @php
+                                                        $labels = ['Home', 'Work', 'Office', 'Other'];
+                                                    @endphp
+
+                                                    @foreach ($labels as $label)
+                                                        <div class="form-check form-check-inline address-label"
+                                                            id="edit_label_{{ strtolower($label) }}">
+                                                            <input type="radio" id="edit_{{ strtolower($label) }}" name="label"
+                                                                value="{{ $label }}" class="form-check-input" disabled>
+                                                            <label class="form-check-label" for="edit_{{ strtolower($label) }}">
+                                                                <i
+                                                                    class="fas fa-{{ strtolower($label) === 'home' ? 'home' : (strtolower($label) === 'work' ? 'briefcase' : (strtolower($label) === 'office' ? 'building' : 'ellipsis-h')) }} me-2"></i>
+                                                                {{ $label }}
+                                                            </label>
+                                                        </div>
+                                                    @endforeach
                                                 </div>
-                                                <div class="form-group mb-3">
-                                                    <label>City</label>
-                                                    <input name="city" type="text" class="form-control"
-                                                        placeholder="Enter City">
+                                                <div class="mt-2">
+                                                    <small class="text-muted">The label cannot be changed. If you want to add a
+                                                        new address, use the "Add Address" option.</small>
                                                 </div>
-                                                <div class="form-group mb-3">
-                                                    <label>Pincode</label>
-                                                    <input name="pincode" type="number" class="form-control"
-                                                        placeholder="Enter Pincode">
-                                                </div>
+                                            </div>
+
+                                            <!-- Address Line 1 -->
+                                            <div class="form-group mb-3">
+                                                <label for="edit_address_line_1">Address Line 1</label>
+                                                <input type="text" class="form-control" id="edit_address_line_1"
+                                                    name="address_line_1" required>
+                                            </div>
+
+                                            <!-- Address Line 2 -->
+                                            <div class="form-group mb-3">
+                                                <label for="edit_address_line_2">Address Line 2</label>
+                                                <input type="text" class="form-control" id="edit_address_line_2"
+                                                    name="address_line_2">
+                                            </div>
+
+                                            <!-- City -->
+                                            <div class="form-group mb-3">
+                                                <label for="edit_city">City</label>
+                                                <input type="text" class="form-control" id="edit_city" name="city" required>
+                                            </div>
+
+                                            <!-- Pincode -->
+                                            <div class="form-group mb-3">
+                                                <label for="edit_pincode">Pincode</label>
+                                                <input type="number" class="form-control" id="edit_pincode" name="pincode"
+                                                    required>
                                             </div>
                                         </div>
 
-                                        <div class="modal-footer border-0">
-                                            <button type="submit" class="btn btn-primary w-100 py-2">
-                                                Add Address
-                                            </button>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cancel</button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
+
+
                     </div>
-                </div>
 
-                <div class="card cart">
-                    <label class="title">CHECKOUT</label>
-                    <div class="steps">
-                        <div class="step">
-                            <div class="shipping">
-                                <span>Delivery Address</span>
-                                <div class="form">
+                    <div class="address-container mb-3">
+                        <h2 class="title">Manage Delivery Addresses</h2>
 
-                                    @if ($addresses->isNotEmpty())
-                                        <ul>
-                                            @foreach ($addresses as $address)
-                                                <li style="margin-bottom: 1rem;padding: 1rem; border-radius: 8px;">
-                                                    <strong>{{ $address->label }}</strong>
-                                                    <p>{{ $address->address_line_1 }},{{ $address->address_line_2 }},{{ $address->city }},
-                                                        {{ $address->pincode }}
-                                                    </p>
+                        <div class="address-list">
+                            @if ($addresses->isNotEmpty())
+                                @foreach ($addresses as $address)
+                                    <div class="address-card {{ session('selected_address')['id'] == $address->id ? 'selected' : '' }}">
+                                        <div class="address-details">
+                                            <strong>{{ $address->label }}</strong>
+                                            <p>{{ $address->address_line_1 }}, {{ $address->address_line_2 }},
+                                                {{ $address->city }}, {{ $address->pincode }}
+                                            </p>
+                                        </div>
+                                        <div class="address-actions d-flex align-items-center gap-3">
+                                            <!-- Modern toggle switch for setting default address -->
+                                            <div class="checkbox-wrapper-22">
+                                                <label class="switch" for="defaultAddressToggle{{ $address->id }}">
+                                                    <input type="checkbox" id="defaultAddressToggle{{ $address->id }}"
+                                                        onchange="selectAddress('{{ $address->id }}')" {{ $address->is_default ? 'checked' : '' }} />
+                                                    <div class="slider round"></div>
+                                                </label>
+                                                <small class="text-muted">Check to set Default Address
+                                                    orders.</small>
+                                            </div>
 
-                                                    <button class="button-30" role="button"
-                                                        onclick="selectAddress('{{ $address->id }}')">Set as
-                                                        Default</button>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    @else
-                                        <p class="text-danger">No saved addresses!</p>
-                                        <!-- <button class="button-30" role="button">Add Address</button> -->
-                                        <button class="button-30" role="button" data-bs-toggle="modal"
-                                            data-bs-target="#addRowModal">Add Address</button>
-                                    @endif
+                                            <!-- Edit button with icon -->
+                                            <button class="btn btn-sm btn-light" title="Edit Address"
+                                                onclick="openEditModal({{ json_encode($address) }})">
+                                                <span data-uk-icon="icon: pencil; ratio: 1.5" class="cart-icon"></span>
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                @endforeach
+                            @else
+                                <p class="text-muted">You haven't added any addresses yet.</p>
+                            @endif
+                        </div>
+
+                        <button class="button-30 mt-2 text-right" data-bs-toggle="modal" data-bs-target="#addAddressModal">Add
+                            New Address</button>
+                    </div>
+
+
+                    <div class="card cart">
+
+                        <label class="title">CHECKOUT</label>
+                        <div class="steps">
+                            <div class="step">
+                                <div class="promo">
+                                    <span>HAVE A PROMO CODE?</span>
+                                    <form class="form">
+                                        <input class="input_field" placeholder="Enter a Promo Code" type="text">
+                                        <button class="button-30" role="button">Apply</button>
+                                    </form>
                                 </div>
-                            </div>
-                            <div class="promo">
-                                <span>HAVE A PROMO CODE?</span>
-                                <form class="form">
-                                    <input class="input_field" placeholder="Enter a Promo Code" type="text">
-                                    <button class="button-30" role="button">Apply</button>
-                                </form>
-                            </div>
-                            <hr>
-                            <div class="payments">
-                                <span>PAYMENT</span>
-                                <div class="details">
-                                    <span>Subtotal:</span>
-                                    <span id="total-amount">₹{{ number_format($cartItems->sum('total_amount'), 2) }}</span>
-                                    <span>Shipping:</span>
-                                    <span>₹50.00</span>
-                                    <span>Tax:</span>
-                                    <span>₹30.40</span>
+                                <hr>
+                                <div class="payments">
+                                    <span>PAYMENT</span>
+                                    <div class="details">
+                                        <span>Subtotal:</span>
+                                        <span id="total-amount">₹{{ number_format($cartItems->sum('total_amount'), 2) }}</span>
+                                        <span>Shipping:</span>
+                                        <span>₹50.00</span>
+                                        <span>Tax:</span>
+                                        <span>₹30.40</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="card checkout mt-2">
-                    <div class="footer">
-                        <form action="{{ route('user.checkout') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="order_ids" value="{{ $cartItems->pluck('id')->join(',') }}">
-                            <input type="hidden" name="total_amount"
-                                value="{{  number_format($cartItems->sum('total_amount') + 50 + 30.40, 2) }}">
+                    <div class="card checkout mt-2">
+                        <div class="footer">
+                            <form action="{{ route('user.checkout') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="order_ids" value="{{ $cartItems->pluck('id')->join(',') }}">
+                                <input type="hidden" name="total_amount"
+                                    value="{{  number_format($cartItems->sum('total_amount') + 50 + 30.40, 2) }}">
 
-                            <div style="margin-bottom: 1rem;">
-                                <h4>Select Payment Method</h4>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="payment_method" id="cod" value="COD"
-                                        required>
-                                    <label class="form-check-label" for="cod">
-                                        <i class="fas fa-money-bill-wave me-2"></i> <span class="text-light">Cash on
-                                            Delivery</span>
-                                    </label>
+                                <div style="margin-bottom: 1rem;">
+                                    <h4>Select Payment Method</h4>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="payment_method" id="cod" value="COD"
+                                            required>
+                                        <label class="form-check-label" for="cod">
+                                            <i class="fas fa-money-bill-wave me-2"></i> <span class="text-light">Cash on
+                                                Delivery</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="payment_method" id="razorpay"
+                                            value="Online" required>
+                                        <label class="form-check-label" for="razorpay">
+                                            <i class="fas fa-credit-card me-2"></i><span class="text-light">Pay Online
+                                                (Razorpay)</span>
+                                        </label>
+                                    </div>
                                 </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="payment_method" id="razorpay"
-                                        value="Online" required>
-                                    <label class="form-check-label" for="razorpay">
-                                        <i class="fas fa-credit-card me-2"></i><span class="text-light">Pay Online
-                                            (Razorpay)</span>
-                                    </label>
-                                </div>
-                            </div>
 
-                            <label class="price" style="margin-right: 12pc;">
-                                Total: ₹{{ number_format($cartItems->sum('total_amount') + 50 + 30.40, 2) }}
-                            </label>
+                                <label class="price" style="margin-right: 12pc;">
+                                    Total: ₹{{ number_format($cartItems->sum('total_amount') + 50 + 30.40, 2) }}
+                                </label>
 
-                            <button type="submit" class="button-30" role="button">Checkout</button>
+                                <button type="submit" class="button-30" role="button">Checkout</button>
 
-                        </form>
+                            </form>
 
+                        </div>
                     </div>
+
+
                 </div>
-
-
-            </div>
 
         @endif
 
@@ -515,14 +774,12 @@
 
 
 <script>
-
-
-
-
     // Define selectAddress in the global scope
-
     function selectAddress(addressId) {
         console.log('Button clicked. Address ID:', addressId);
+
+        const checkbox = document.getElementById(`defaultAddressToggle${addressId}`);
+        const isChecked = checkbox.checked;  // Get the current state of the checkbox (checked or unchecked)
 
         const url = `{{ url('user/address/select') }}`;
 
@@ -533,7 +790,10 @@
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
             },
-            body: JSON.stringify({ address_id: addressId }), // Send address_id in the request body
+            body: JSON.stringify({
+                address_id: addressId,
+                is_default: isChecked  // Send whether the checkbox is checked
+            }),
         })
             .then(async (response) => {
                 if (!response.ok) {
@@ -543,15 +803,59 @@
                 return response.json();
             })
             .then((data) => {
-                // Display success message and reload the page
-                alert(data.message || 'Address set as default!');
-                location.reload();
+                // Display success message and update UI accordingly
+                var content = {
+                    message: data.message || (isChecked ? 'Address set as default!' : 'Default address removed!'),
+                    title: "Success",
+                    icon: "fa fa-bell"
+                };
+
+                $.notify(content, {
+                    type: 'success',
+                    placement: {
+                        from: 'top',
+                        align: 'right'
+                    },
+                    time: 1000,
+                    delay: 5000,
+                });
             })
             .catch((error) => {
                 console.error('Error:', error.message);
-                alert('Unable to set default address. Please try again.');
+                alert('Unable to update the default address. Please try again.');
             });
     }
+
+
+
+
+    function openEditModal(address) {
+        // Fill modal inputs with existing address data
+        document.getElementById('edit_address_id').value = address.id;
+        document.getElementById('edit_address_line_1').value = address.address_line_1;
+        document.getElementById('edit_address_line_2').value = address.address_line_2;
+        document.getElementById('edit_city').value = address.city;
+        document.getElementById('edit_pincode').value = address.pincode;
+
+        // Highlight the correct label
+        const labels = ['home', 'work', 'office', 'other'];
+        labels.forEach(label => {
+            const element = document.getElementById(`edit_label_${label}`);
+            if (element) element.classList.remove('active-label'); // Remove highlight
+        });
+
+        const selectedLabel = address.label.toLowerCase();
+        const activeElement = document.getElementById(`edit_label_${selectedLabel}`);
+        if (activeElement) activeElement.classList.add('active-label'); // Add highlight
+
+        // Check the correct radio button
+        document.querySelector(`input[name="label"][value="${address.label}"]`).checked = true;
+
+        // Show the modal
+        $('#editAddressModal').modal('show');
+    }
+
+
 
     // Additional modal logic
     $(document).ready(function () {

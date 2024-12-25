@@ -23,12 +23,18 @@ class CheckoutController extends Controller
         $paymentMethod = $request->input('payment_method');
         $totalAmount = intval(round(($request->input('total_amount') * 100)));
 
+        $selected_address = session('selected_address');
+
+        if (!$selected_address) {
+            return redirect()->back()->withErrors('No address selected.');
+        }
         // Case 1: COD
         if ($paymentMethod === 'COD') {
             // Update orders with COD status
             Order::whereIn('id', $orderIds)->where('user_id', $user->id)->update([
                 'status' => 'Completed',
                 'payment_status' => 'COD',
+                'selected_address' => json_encode($selected_address), // Serialize the address
             ]);
             return redirect('user/order-confirmation')->with('success', 'Order placed successfully with COD.');
         }
@@ -111,6 +117,12 @@ class CheckoutController extends Controller
     {
         $user = Auth::guard('user')->user();
 
+        $selected_address = session('selected_address');
+
+        if (!$selected_address) {
+            return redirect()->back()->withErrors('No address selected.');
+        }
+
         $orderIds = explode(',', $request->input('order_ids'));
         $paymentStatus = $request->input('payment_status');
 
@@ -120,6 +132,8 @@ class CheckoutController extends Controller
                 ->update([
                     'status' => 'Completed',
                     'payment_status' => $paymentStatus,
+                    'selected_address' => json_encode($selected_address), // Serialize the address
+
                 ]);
 
             return response()->json(['success' => true, 'message' => 'Order statuses updated successfully.']);

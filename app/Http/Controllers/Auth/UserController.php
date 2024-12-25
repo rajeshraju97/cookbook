@@ -101,19 +101,60 @@ class UserController extends Controller
         return back()->with('success', 'Address added successfully!');
     }
 
+    public function editAddress(Request $request)
+    {
+        $request->validate([
+            'address_id' => 'required|exists:user_addresses,id',
+            'address_line_1' => 'required|string',
+            'address_line_2' => 'nullable|string',
+            'city' => 'required|string',
+            'pincode' => 'required|numeric',
+        ]);
+
+        $user_id = Auth::guard('user')->id();
+
+        UserAddress::where('id', $request->address_id)
+            ->where('user_id', $user_id)
+            ->update([
+                'address_line_1' => $request->input('address_line_1'),
+                'address_line_2' => $request->input('address_line_2'),
+                'city' => $request->input('city'),
+                'pincode' => $request->input('pincode'),
+            ]);
+
+        return back()->with('success', 'Address updated successfully!');
+    }
+
+
+
     public function selectAddress(Request $request)
     {
-        $request->validate(['address_id' => 'required|exists:user_addresses,id']);
+        $request->validate([
+            'address_id' => 'required|exists:user_addresses,id',
+            'is_default' => 'required|boolean',
+        ]);
 
         $user_id = Auth::guard('user')->id();
         $address = UserAddress::where('id', $request->address_id)
             ->where('user_id', $user_id)
             ->firstOrFail();
 
-        // Save selected address to user's session or orders table
-        session(['selected_address' => $address->toArray()]);
+        // If the user wants to set a new default address, unset the previous default address
+        if ($request->is_default) {
+            // Set the current address as default and unset all others
+            UserAddress::where('user_id', $user_id)->update(['is_default' => false]);
+            $address->is_default = true;
+            $address->save();
 
-        return response()->json(['message' => 'Address selected successfully!']);
+            return response()->json(['message' => 'Address set as default!']);
+        } else {
+            // Remove default status from the current address
+            $address->is_default = false;
+            $address->save();
+
+            return response()->json(['message' => 'Default address removed!']);
+        }
     }
+
 
 }

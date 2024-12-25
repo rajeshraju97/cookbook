@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\Admin\CuponController;
 use App\Http\Controllers\Admin\DishesController;
 use App\Http\Controllers\Admin\DishtypeController;
 use App\Http\Controllers\User\DashboardController;
@@ -46,6 +47,7 @@ Route::prefix('user')
         Route::post('/order-ingredients', [OrderController::class, 'addToCart'])->name('order.ingredients');
         Route::get('/cart', [OrderController::class, 'viewCart'])->name('cart');
         Route::post('/address/add', [UserController::class, 'addAddress'])->name('address.add');
+        Route::post('/address/edit', [UserController::class, 'editAddress'])->name('address.edit');
         Route::post('/address/select', [UserController::class, 'selectAddress'])->name('address.select');
 
         Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
@@ -81,6 +83,7 @@ Route::prefix('admin')
         Route::resource('dish_type', DishtypeController::class);
         Route::resource('dishes', DishesController::class);
         Route::resource('orders', AdminOrderController::class);
+        Route::resource('coupons', CuponController::class);
         Route::get('/transaction', [AdminDashboardController::class, 'razorpay_transactions'])->name('razorpay_transactions');
     });
 
