@@ -944,12 +944,13 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Close the modal
+                    // Close the modal and remove the backdrop immediately
                     const modalElement = document.getElementById('couponModal');
                     const modal = bootstrap.Modal.getInstance(modalElement);
                     modal.hide();
+                    document.querySelector('.modal-backdrop')?.remove();
 
-                    // Success notification
+                    // Show success notification
                     var content = {
                         message: `Coupon applied! Discount: ₹${data.discount}`,
                         title: "Success",
@@ -963,14 +964,14 @@
                             align: 'right',
                         },
                         time: 1000,
-                        delay: 5000, // Notification delay
+                        delay: 2000, // Notification delay
                         onClosed: function () {
                             // Reload the page after the notification is closed
                             location.reload();
                         },
                     });
                 } else {
-                    // Warning notification
+                    // Show warning notification
                     var content = {
                         message: `<strong>${data.message}</strong>`,
                         title: "Warning",
