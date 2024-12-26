@@ -34,6 +34,7 @@ class CheckoutController extends Controller
         }
 
         $cartTotal = session('new_total');
+        
         if ($coupon->minimum_order_value && $cartTotal < $coupon->minimum_order_value) {
             return response()->json(['success' => false, 'message' => 'Cart total is less than the minimum required.']);
         }

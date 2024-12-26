@@ -67,11 +67,11 @@
                                                     <div class="form-group form-group-default">
                                                         <label>Coupon Code</label>
                                                         <input id="addName" name="code" type="text" class="form-control"
-                                                            placeholder="fill Coupon Code" />
+                                                            placeholder="fill Coupon Code" required />
                                                     </div>
                                                     <div class="form-group form-group-default">
                                                         <label>Type</label>
-                                                        <select class="form-control" name="type">
+                                                        <select class="form-control" name="type" required>
                                                             <option value=""> Select Type</option>
                                                             <option value="percentage">Percentage</option>
                                                             <option value="fixed">Fixed</option>
@@ -81,25 +81,26 @@
                                                     <div class="form-group form-group-default">
                                                         <label>Value</label>
                                                         <input id="addName" name="value" type="text"
-                                                            class="form-control" placeholder="fill Value" />
+                                                            class="form-control" placeholder="fill Value" required />
                                                     </div>
 
                                                     <div class="form-group form-group-default">
                                                         <label>Minimun Order Value</label>
                                                         <input id="addName" name="minimum_order_value" type="text"
-                                                            class="form-control"
-                                                            placeholder="fill Minimun Order Value" />
+                                                            class="form-control" placeholder="fill Minimun Order Value"
+                                                            required />
                                                     </div>
 
                                                     <div class="form-group form-group-default">
                                                         <label>Expiry Date</label>
                                                         <input id="addName" name="expiry_date" type="date"
-                                                            class="form-control" placeholder="fill Type Name" />
+                                                            class="form-control" placeholder="fill Type Name"
+                                                            required />
                                                     </div>
 
                                                     <div class="form-group form-group-default">
                                                         <label>Value</label>
-                                                        <select class="form-control" name="active">
+                                                        <select class="form-control" name="active" required>
                                                             <option value=""> Select status</option>
                                                             <option value="1">Active</option>
                                                             <option value="0">Inactive</option>
@@ -278,7 +279,7 @@
     $(document).ready(function () {
         // Add Row
         $("#add-row").DataTable({
-            pageLength: 5,
+            pageLength: 10,
         });
 
 

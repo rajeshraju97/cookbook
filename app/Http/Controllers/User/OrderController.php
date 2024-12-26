@@ -87,6 +87,8 @@ class OrderController extends Controller
         $cartTotal = $cartItems->sum('total_amount');
         session(['cart_total' => $cartTotal]);
 
+        // dd(session('cart_total'));
+
         // User addresses
         $addresses = UserAddress::where('user_id', $user_id)->get();
 

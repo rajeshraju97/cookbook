@@ -166,7 +166,26 @@
                                     <tr>
                                         <td>{{$loop->iteration}}</td>
                                         <td>{{$order->user->username}}</td>
-                                        <td>{{!empty($order->selected_address) ? $order->selected_address : '-'}}</td>
+                                        @php
+                                            $address = json_decode($order->selected_address, true); // Decode JSON string into an associative array
+                                        @endphp
+
+                                        <td>
+                                            <ul>
+                                                @if (is_array($address))
+                                                    <li>
+                                                        <strong>{{ $address['label'] }}</strong>
+                                                        ({{ $address['address_line_1'] }},
+                                                        {{ $address['address_line_2'] }},
+                                                        {{ $address['city'] }})
+                                                    </li>
+                                                @else
+                                                    <li>Address data is invalid or unavailable.</li>
+                                                @endif
+                                            </ul>
+                                        </td>
+
+
                                         <td>{{ $order->dishes->dish_name }}</td>
                                         <td style="width: 25%;">
                                             <ul class="truncated-list">
@@ -264,7 +283,7 @@
     $(document).ready(function () {
         // Add Row
         $("#add-row").DataTable({
-            pageLength: 5,
+            pageLength: 10,
         });
 
 

@@ -111,7 +111,7 @@
                         <li class="nav-item">
                             <a href="{{route('admin.orders.index')}}">
                                 <i class="fas fa-pen-square"></i>
-                                <p>Ordes</p>
+                                <p>Orders</p>
                                 <span class="caret"></span>
                             </a>
 

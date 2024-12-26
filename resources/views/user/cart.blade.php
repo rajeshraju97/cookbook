@@ -527,20 +527,7 @@
                                                                     <i class="fas fa-home me-2"></i> Home
                                                                 </label>
                                                             </div>
-                                                            <div class="form-check form-check-inline address-label">
-                                                                <input type="radio" id="work" name="label" value="Work"
-                                                                    class="form-check-input">
-                                                                <label class="form-check-label" for="work">
-                                                                    <i class="fas fa-briefcase me-2"></i> Work
-                                                                </label>
-                                                            </div>
-                                                            <div class="form-check form-check-inline address-label">
-                                                                <input type="radio" id="office" name="label" value="Office"
-                                                                    class="form-check-input">
-                                                                <label class="form-check-label" for="office">
-                                                                    <i class="fas fa-building me-2"></i> Office
-                                                                </label>
-                                                            </div>
+
                                                             <div class="form-check form-check-inline address-label">
                                                                 <input type="radio" id="other" name="label" value="Other"
                                                                     class="form-check-input">
@@ -607,7 +594,7 @@
                                                 <label class="mb-2">Address Label</label>
                                                 <div class="d-flex gap-2 flex-wrap">
                                                     @php
-                                                        $labels = ['Home', 'Work', 'Office', 'Other'];
+                                                        $labels = ['Home', 'Other'];
                                                     @endphp
 
                                                     @foreach ($labels as $label)
@@ -743,8 +730,7 @@
                                                         onchange="selectAddress('{{ $address->id }}')" {{ $address->is_default ? 'checked' : '' }} />
                                                     <div class="slider round"></div>
                                                 </label>
-                                                <small class="text-muted">Check to set Default Address
-                                                    orders.</small>
+                                                <small class="text-muted">Check to set Default Address orders.</small>
                                             </div>
 
                                             <!-- Edit button with icon -->
@@ -753,7 +739,6 @@
                                                 <span data-uk-icon="icon: pencil; ratio: 1.5" class="cart-icon"></span>
                                             </button>
                                         </div>
-
                                     </div>
                                 @endforeach
                             @else
@@ -761,9 +746,17 @@
                             @endif
                         </div>
 
-                        <button class="button-30 mt-2 text-right" data-bs-toggle="modal" data-bs-target="#addAddressModal">Add
-                            New Address</button>
+                        @php
+                            $addressLabels = $addresses->pluck('label')->toArray(); // Extract all address labels into an array
+                        @endphp
+
+                        @if (!in_array('Home', $addressLabels) || !in_array('Other', $addressLabels))
+                            <!-- Show Add Address button if both "Home" and "Other" labels are not present -->
+                            <button class="button-30 mt-2 text-right" data-bs-toggle="modal" data-bs-target="#addAddressModal">Add
+                                New Address</button>
+                        @endif
                     </div>
+
 
 
                     <div class="card cart">
@@ -787,13 +780,27 @@
                                     <span>PAYMENT</span>
                                     <div class="details">
                                         <span>Subtotal:</span>
-                                        <span id="total-amount">₹{{ number_format($cartTotal, 2) }}</span>
+                                        <span style="font-weight: bold;">₹{{ number_format($cartTotal, 2) }}</span>
+
+                                        <!-- Discount Section -->
+                                        <span id="dis" style="display:none; font-weight: bold;">Applied Discount Amount:</span>
+                                        <span class="bg-success dis" id="total-amount" style="display:none; color: #155724;">-
+                                            ₹0.00</span>
+
+                                        <!-- New Subtotal Section -->
+                                        <span id="new" style="display:none; font-weight: bold;">New Subtotal:</span>
+                                        <span id="total-amount1"
+                                            style="display:none; font-weight: bold; color: #004085;">₹{{ number_format($cartTotal, 2) }}</span>
+
                                         <span>Shipping:</span>
-                                        <span>₹50.00</span>
+                                        <span style="font-weight: bold;">₹50.00</span>
                                         <span>Tax:</span>
-                                        <span>₹30.40</span>
+                                        <span style="font-weight: bold;">₹30.40</span>
                                     </div>
                                 </div>
+
+
+
                             </div>
                         </div>
                     </div>
@@ -894,6 +901,10 @@
                     },
                     time: 1000,
                     delay: 5000,
+                    onClosed: function () {
+                        // Reload the page after the notification is closed
+                        location.reload();
+                    },
                 });
 
 
@@ -1024,15 +1035,32 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         const newTotal = "{{ session('new_total', '') }}";
+        const discount = "{{ session('coupon_discount', default: '') }}";
         const shipping = 50; // Shipping charge
         const tax = 30.40;  // Tax charge
 
 
         console.log(newTotal);
+        console.log(discount);
 
         if (newTotal) {
             const finalTotal = parseFloat(newTotal) + shipping + tax;
-            document.getElementById('total-amount').innerText = `₹${parseFloat(newTotal).toFixed(2)}`;
+            const discountSpan1 = document.getElementById('total-amount');
+            const discountSpan2 = document.getElementById('dis');
+
+            discountSpan1.style.display = 'inline';
+            discountSpan2.style.display = 'inline'; // Show the discount span
+
+
+            const new1 = document.getElementById('total-amount1');
+            const new2 = document.getElementById('new');
+
+            new1.style.display = 'inline';
+            new2.style.display = 'inline'; // Show the discount span
+
+
+            document.getElementById('total-amount').innerText = `- ₹${parseFloat(discount).toFixed(2)}`;
+            document.getElementById('total-amount1').innerText = `₹${parseFloat(newTotal).toFixed(2)}`;
             document.getElementById('total-amount2').value = finalTotal;
             document.getElementById('total-amount3').innerText = `₹${finalTotal.toFixed(2)}`;
         }
