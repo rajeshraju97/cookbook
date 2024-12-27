@@ -5,14 +5,18 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Razorpay\Api\Api;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
     //
     public function index()
     {
-        return view("admin.dashboard");
+
+
+        return view("admin.dashboar");
     }
+
 
 
 
@@ -52,6 +56,19 @@ class DashboardController extends Controller
             return back()->withErrors('Error fetching transactions: ' . $e->getMessage());
         }
     }
+
+    public function showNotifications()
+    {
+        $admin = Auth::guard('admin')->user();
+
+        // Mark all unread notifications as read
+        $admin->unreadNotifications->markAsRead();
+
+        $notifications = $admin->notifications; // Fetch all notifications
+
+        return view('admin.notifications', compact('notifications'));
+    }
+
 
 
 

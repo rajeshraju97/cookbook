@@ -5,8 +5,7 @@
 @include('layouts.nav')
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
-
-<h3>Total Amount: ₹{{ $amount / 10000}}</h3>
+<h3>Total Amount: ₹{{ number_format($amount / 100, 2) }}</h3>
 
 <script>
     const options = {
@@ -18,7 +17,7 @@
             contact: "{{ $mobile }}", // User's mobile number
         },
         handler: function (response) {
-            // Make an AJAX request to update order statuses
+            // Make an AJAX request to update order statuses and redirect
             fetch('/user/update-order-status', {
                 method: 'POST',
                 headers: {
@@ -28,13 +27,15 @@
                 body: JSON.stringify({
                     order_ids: "{{ implode(',', $orderIds) }}", // Pass the order IDs
                     payment_status: 'Online',
+                    payment_id: response.razorpay_payment_id, // Razorpay Payment ID
+                    amount: "{{ $amount }}", // Amount in paise
                 }),
             })
                 .then((res) => res.json())
                 .then((data) => {
                     if (data.success) {
-                        // Redirect to order-confirmation page
-                        window.location.href = "/order-confirmation";
+                        // Redirect to the order-confirmation page
+                        window.location.href = "/user/order-confirmation";
                     } else {
                         alert("Failed to update order status. Please contact support.");
                     }
@@ -53,5 +54,6 @@
     const rzp = new Razorpay(options);
     rzp.open();
 </script>
+
 
 @endsection

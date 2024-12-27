@@ -1,80 +1,19 @@
 {
-    "Chicken": {
-        "unit": "1 kg",
-        "quantity": 1,
-        "price": 150,
-        "type": "variable"
+    "user_id": 5,
+    "order_ids": ["29"],
+    "payment_method": "Online",
+    "total_amount": "250.40",
+    "address": {
+        "id": 2,
+        "user_id": 5,
+        "label": "Other",
+        "address_line_1": "jagadamba",
+        "address_line_2": "vizag",
+        "city": "Vishakapatnam",
+        "pincode": "531011",
+        "is_default": true,
+        "created_at": "2024-12-25T04:29:36.000000Z",
+        "updated_at": "2024-12-27T12:27:33.000000Z"
     },
-    "Onions": {
-        "unit": "300 g",
-        "quantity": 1,
-        "price": 25,
-        "type": "variable"
-    },
-    "Tomatoes": {
-        "unit": "200 g",
-        "quantity": 1,
-        "price": 10,
-        "type": "variable"
-    },
-    "Ginger-garlic paste": {
-        "unit": "1 pack",
-        "quantity": 1,
-        "price": 10,
-        "type": "variable"
-    },
-    "Green chilies": {
-        "unit": "30 g",
-        "quantity": 1,
-        "price": 10,
-        "type": "variable"
-    },
-    "Curry leaves": {
-        "unit": "15 g",
-        "quantity": 1,
-        "price": 10,
-        "type": "variable"
-    },
-    "Coriander powder": {
-        "unit": "1 pack",
-        "quantity": 1,
-        "price": 5,
-        "type": "fixed"
-    },
-    "Cumin powder": {
-        "unit": "1 pack",
-        "quantity": 1,
-        "price": 5,
-        "type": "fixed"
-    },
-    "Red chili powder": {
-        "unit": "1 pack",
-        "quantity": 1,
-        "price": 5,
-        "type": "fixed"
-    },
-    "Turmeric powder": {
-        "unit": "1 pack",
-        "quantity": 1,
-        "price": 5,
-        "type": "fixed"
-    },
-    "Garam masala": {
-        "unit": "1 pack",
-        "quantity": 1,
-        "price": 5,
-        "type": "fixed"
-    },
-    "Coconut milk": {
-        "unit": "200 ml",
-        "quantity": 1,
-        "price": 50,
-        "type": "variable"
-    },
-    "Coriander leaves": {
-        "unit": "20 g",
-        "quantity": 1,
-        "price": 10,
-        "type": "variable"
-    }
+    "status": "Completed"
 }

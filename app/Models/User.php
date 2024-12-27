@@ -61,4 +61,11 @@ class User extends Authenticatable
         return $this->hasMany(CouponUsage::class);
     }
 
+    // In User Model
+    public function addresses()
+    {
+        return $this->hasMany(UserAddress::class);
+    }
+
+
 }

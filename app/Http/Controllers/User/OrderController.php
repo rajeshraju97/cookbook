@@ -112,6 +112,12 @@ class OrderController extends Controller
     }
 
 
+    public function order_confirmation()
+    {
+        return view('user.order-confirmation');
+    }
+
+
 
 
 

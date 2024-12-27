@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\user;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Razorpay\Api\Api;
 use App\Models\Order;
 use App\Models\Coupon;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\OrderPlacedNotification;
+use App\Models\Admin; // Use the Admin model
 
 class CheckoutController extends Controller
 {
@@ -80,45 +83,59 @@ class CheckoutController extends Controller
 
 
 
+
+
+
+
     public function checkout(Request $request)
     {
         $request->validate([
             "payment_method" => "required",
             'total_amount' => "required",
         ]);
-        // dd($request->total_amount);
+
         $user = Auth::guard('user')->user();
         $orderIds = explode(',', $request->input('order_ids'));
         $paymentMethod = $request->input('payment_method');
         $totalAmountInput = $request->input('total_amount');
-
-        // Remove commas or non-numeric characters
         $totalAmount = intval(round((float) str_replace(',', '', $totalAmountInput) * 100));
-
-
-        $selected_address = session('selected_address');
+        $selected_address = session('selected_address') ?? $user->addresses()->where('is_default', 1)->first();
 
         if (!$selected_address) {
-            return redirect()->back()->withErrors('No address selected.');
+            return redirect()->back()->withErrors('No default address available.');
         }
-        // Case 1: COD
+
         if ($paymentMethod === 'COD') {
-            // Update orders with COD status
+            // Update orders
             Order::whereIn('id', $orderIds)->where('user_id', $user->id)->update([
                 'status' => 'Completed',
                 'payment_status' => 'COD',
-                'selected_address' => json_encode($selected_address), // Serialize the address
+                'selected_address' => json_encode($selected_address),
             ]);
+
+            // Notify the admin
+            $admin = Admin::first(); // Assuming a single admin user
+            if ($admin) {
+                $orderDetails = [
+                    'user_id' => $user->id,
+                    'order_ids' => $orderIds,
+                    'payment_method' => $paymentMethod,
+                    'total_amount' => $totalAmount / 100,
+                    'selected_address' => $selected_address,
+                    'status' => 'Completed',
+                ];
+                $admin->notify(new OrderPlacedNotification($orderDetails));
+            }
+
             return redirect('user/order-confirmation')->with('success', 'Order placed successfully with COD.');
         }
 
-        // Case 2: Pay Online with Razorpay
         if ($paymentMethod === 'Online') {
             $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
             $order = $api->order->create([
                 'amount' => $totalAmount,
                 'currency' => 'INR',
-                'payment_capture' => 1, // Auto-capture payment
+                'payment_capture' => 1,
             ]);
 
             return view('user.razorpay-payment', [
@@ -133,6 +150,8 @@ class CheckoutController extends Controller
 
         return back()->withErrors('Invalid payment method.');
     }
+
+
 
     public function createPaymentOrder(Request $request)
     {
@@ -186,18 +205,20 @@ class CheckoutController extends Controller
         }
     }
 
+
     public function updateOrderStatus(Request $request)
     {
         $user = Auth::guard('user')->user();
-
-        $selected_address = session('selected_address');
+        $selected_address = session('selected_address') ?? $user->addresses()->where('is_default', 1)->first();
 
         if (!$selected_address) {
-            return redirect()->back()->withErrors('No address selected.');
+            return response()->json(['success' => false, 'message' => 'No address selected.']);
         }
 
         $orderIds = explode(',', $request->input('order_ids'));
         $paymentStatus = $request->input('payment_status');
+        $paymentId = $request->input('payment_id');
+        $amount = $request->input('amount');
 
         try {
             Order::whereIn('id', $orderIds)
@@ -205,15 +226,34 @@ class CheckoutController extends Controller
                 ->update([
                     'status' => 'Completed',
                     'payment_status' => $paymentStatus,
-                    'selected_address' => json_encode($selected_address), // Serialize the address
-
+                    'razorpay_payment_id' => $paymentId ?? null,
+                    'selected_address' => json_encode($selected_address),
                 ]);
+
+            // Notify the admin
+            $admin = Admin::first();
+            if ($admin) {
+                $orderDetails = [
+                    'user_id' => $user->id,
+                    'order_ids' => $orderIds,
+                    'payment_method' => 'Online',
+                    'total_amount' => $amount / 100,
+                    'selected_address' => $selected_address,
+                    'status' => 'Completed',
+                ];
+                $admin->notify(new OrderPlacedNotification($orderDetails));
+            }
 
             return response()->json(['success' => true, 'message' => 'Order statuses updated successfully.']);
         } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Order Status Update Error: ' . $e->getMessage());
+
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
+
     }
+
 
     public function destroy($id)
     {

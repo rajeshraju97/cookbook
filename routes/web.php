@@ -52,9 +52,8 @@ Route::prefix('user')
 
         Route::post('/apply-coupon', [CheckoutController::class, 'applyCoupon'])->name('applyCoupon');
         Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
-        Route::get('/order-confirmation', function () {
-            return view('user.order-confirmation');
-        });
+        Route::get('/order-confirmation', [OrderController::class, 'order_confirmation'])->name('order-confirmation');
+
         Route::post('/create-payment-order', [CheckoutController::class, 'createPaymentOrder'])->name('create-payment-order');
 
         Route::post('/update-order-status', [CheckoutController::class, 'updateOrderStatus'])->name('user.update-order-status');
@@ -86,6 +85,15 @@ Route::prefix('admin')
         Route::resource('orders', AdminOrderController::class);
         Route::resource('coupons', CuponController::class);
         Route::get('/transaction', [AdminDashboardController::class, 'razorpay_transactions'])->name('razorpay_transactions');
+
+        Route::get('/all-notifications', [AdminDashboardController::class, 'showNotifications'])->name('notifications'); // For the "See All Notifications" link
+    
+        Route::get('/notifications/count', function () {
+            $admin = Auth::guard('admin')->user();
+            $unreadCount = $admin->unreadNotifications->count();
+            return response()->json(['unreadCount' => $unreadCount]);
+        })->name('notifications.count');
+
     });
 
 

@@ -158,6 +158,7 @@
                                         <th>Total Amount</th>
                                         <th>Status</th>
                                         <th>Payment Status</th>
+                                        <th>Payment Id</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -211,7 +212,7 @@
 
 
 
-                                        <td>{{ $order->total_amount }}</td>
+                                        <td>{{ !empty($order->total_amount) ? $order->total_amount : '-' }}</td>
                                         <td>
                                             @php
                                                 $statusStyles = [
@@ -238,7 +239,9 @@
                                                 <span class="badge bg-light text-muted">-</span>
                                             @endif
                                         </td>
-
+                                        
+                                        <td>{{ !empty($order->razorpay_payment_id) ? $order->razorpay_payment_id : '-' }}</td>
+                                      
                                         <td>
                                             <div class="form-button-action">
 

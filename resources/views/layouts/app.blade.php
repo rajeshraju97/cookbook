@@ -2,10 +2,16 @@
 <html lang="en-gb" dir="ltr">
 
 <head>
+    <link rel="manifest" href="/manifest.json">
+
+    <meta name="theme-color" content="#4CAF50">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
+    <meta name="description" content="A comprehensive cookbook with various recipes to try." />
+
+
     <title>@yield('title', 'Cookbook')</title>
-    <link rel="shortcut icon" type="image/png" href="img/favicon.png">
+    <link rel="shortcut icon" type="image/png" href="{{asset('/favicon.png')}}">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Leckerli+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/main.css')}}" />
@@ -42,6 +48,18 @@
             },
         });
     </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(function (registration) {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch(function (error) {
+                    console.error('Service Worker registration failed:', error);
+                });
+        }
+    </script>
+
 
 </head>
 
@@ -233,37 +251,15 @@
     <script src="{{asset('js/core/popper.min.js')}}"></script>
     <script src="{{asset('js/core/bootstrap.min.js')}}"></script>
 
-    <!-- jQuery Scrollbar -->
-    <script src="{{asset('js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')}}"></script>
-
-    <!-- Chart JS -->
-    <script src="{{asset('js/plugin/chart.js/chart.min.js')}}"></script>
-
-    <!-- jQuery Sparkline -->
-    <script src="{{asset('js/plugin/jquery.sparkline/jquery.sparkline.min.js')}}"></script>
-
-    <!-- Chart Circle -->
-    <script src="{{asset('js/plugin/chart-circle/circles.min.js')}}"></script>
-
-    <!-- Datatables -->
-    <script src="{{asset('js/plugin/datatables/datatables.min.js')}}"></script>
 
     <!-- Bootstrap Notify -->
     <script src="{{asset('js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
 
-    <!-- jQuery Vector Maps -->
-    <script src="{{asset('js/plugin/jsvectormap/jsvectormap.min.js')}}"></script>
-    <script src="{{asset('js/plugin/jsvectormap/world.js')}}"></script>
 
     <!-- Sweet Alert -->
     <script src="{{asset('js/plugin/sweetalert/sweetalert.min.js')}}"></script>
 
-    <!-- Kaiadmin JS -->
-    <script src="{{asset('js/kaiadmin.min.js')}}"></script>
 
-    <!-- Kaiadmin DEMO methods, don't include it in your project! -->
-    <script src="{{asset('js/setting-demo.js')}}"></script>
-    <script src="{{asset('js/demo.js')}}"></script>
 
 
 

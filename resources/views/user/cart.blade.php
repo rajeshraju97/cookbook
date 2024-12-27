@@ -446,6 +446,7 @@
 
 
 <div class="container-fluid">
+
     <!-- Left Panel: Dishes and Total -->
     <div class="row">
         <div class="left-panel col-12 col-lg-8">
@@ -784,12 +785,14 @@
 
                                         @if ($discountTotal > 0)
                                             <span>Applied Discount:</span>
-                                            <span style="font-weight: bold; color: red;">-
+                                            <span style="font-weight: bold; color: #a7ff00;">-
                                                 ₹{{ number_format($discountTotal, 2) }}</span>
-                                        @endif
 
-                                        <span>Final Total:</span>
-                                        <span style="font-weight: bold;">₹{{ number_format($finalTotal, 2) }}</span>
+                                            <span>New Total:</span>
+                                            <span
+                                                style="font-weight: bold; color: #a7ff00;">₹{{ number_format($finalTotal, 2) }}</span>
+
+                                        @endif
 
                                         <span>Shipping:</span>
                                         <span style="font-weight: bold;">₹50.00</span>
@@ -809,7 +812,7 @@
                             <form action="{{ route('user.checkout') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="order_ids" value="{{ $cartItems->pluck('id')->join(',') }}">
-                                <input type="text" name="total_amount"
+                                <input type="hidden" name="total_amount"
                                     value="{{  number_format($finalTotal + 50 + 30.40, 2) }}">
 
                                 <div style="margin-bottom: 1rem;">
@@ -855,6 +858,8 @@
 
 
 
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
     // Define selectAddress in the global scope
     function selectAddress(addressId) {
