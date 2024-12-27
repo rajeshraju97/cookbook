@@ -33,8 +33,16 @@ class CheckoutController extends Controller
             return response()->json(['success' => false, 'message' => 'You have already used this coupon.']);
         }
 
-        $cartTotal = session('new_total');
-        
+        $cartItems = Order::where('user_id', $user->id)
+            ->where('status', 'Cart')
+            ->get();
+
+        if ($cartItems->isEmpty()) {
+            return response()->json(['success' => false, 'message' => 'Your cart is empty.']);
+        }
+
+        $cartTotal = $cartItems->sum('total_amount');
+
         if ($coupon->minimum_order_value && $cartTotal < $coupon->minimum_order_value) {
             return response()->json(['success' => false, 'message' => 'Cart total is less than the minimum required.']);
         }
@@ -45,10 +53,23 @@ class CheckoutController extends Controller
 
         $newTotal = max(0, $cartTotal - $discount);
 
+        // Update orders with coupon and discount
+        foreach ($cartItems as $item) {
+            \Log::info('Updating Order ID: ' . $item->id, [
+                'applied_coupon_id' => $coupon->id,
+                'discount_amount' => $discount / $cartItems->count(),
+            ]);
+
+            $item->update([
+                'applied_coupon_id' => $coupon->id,
+                'discount_amount' => $discount / $cartItems->count(),
+            ]);
+        }
+
+
+
         // Save coupon usage
         $user->couponUsages()->create(['coupon_id' => $coupon->id]);
-
-        session(['coupon_discount' => $discount, 'new_total' => $newTotal]);
 
         return response()->json([
             'success' => true,
@@ -56,6 +77,7 @@ class CheckoutController extends Controller
             'new_total' => $newTotal,
         ]);
     }
+
 
 
     public function checkout(Request $request)

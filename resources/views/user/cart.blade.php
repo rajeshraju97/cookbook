@@ -79,7 +79,7 @@
     }
 
     /* Promo */
-    .promo form {
+    .promo .available-coupons {
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
@@ -101,7 +101,7 @@
 
     }
 
-    .promo form button {
+    .promo .available-coupons button {
         height: 36px;
         border-radius: 5px;
         border: 0;
@@ -127,12 +127,13 @@
     }
 
     .checkout .footer {
-        display: flex;
+
         flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
         padding: 10px 10px 10px 20px;
         background-color: #FF7D29;
+        border-radius: 19px 19px 0px 0px;
     }
 
     .price {
@@ -142,21 +143,17 @@
         margin-bottom: 10px;
     }
 
-    .checkout .checkout-btn {
-        display: flex;
+    .checkout .footer .checkout-btn {
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        width: 150px;
-        height: 36px;
-        border-radius: 7px;
-        border: 1px solid #ECC2C0;
         color: #000000;
-        font-size: 13px;
+        font-size: 16px;
         font-weight: 600;
-        transition: all 0.3s cubic-bezier(0.15, 0.83, 0.66, 1);
-    }
 
+    }
+</style>
+<style>
     /* css for the button */
     .button-30 {
         align-items: center;
@@ -169,7 +166,7 @@
         color: #36395A;
         cursor: pointer;
         display: inline-flex;
-        font-family: "JetBrains Mono", monospace;
+        font-family: "Montserrat", san-serif;
         height: 48px;
         justify-content: center;
         line-height: 1;
@@ -203,6 +200,9 @@
         transform: translateY(2px);
     }
 </style>
+
+
+
 
 <style>
     /* modal desings */
@@ -782,15 +782,14 @@
                                         <span>Subtotal:</span>
                                         <span style="font-weight: bold;">₹{{ number_format($cartTotal, 2) }}</span>
 
-                                        <!-- Discount Section -->
-                                        <span id="dis" style="display:none; font-weight: bold;">Applied Discount Amount:</span>
-                                        <span class="bg-success dis" id="total-amount" style="display:none; color: #155724;">-
-                                            ₹0.00</span>
+                                        @if ($discountTotal > 0)
+                                            <span>Applied Discount:</span>
+                                            <span style="font-weight: bold; color: red;">-
+                                                ₹{{ number_format($discountTotal, 2) }}</span>
+                                        @endif
 
-                                        <!-- New Subtotal Section -->
-                                        <span id="new" style="display:none; font-weight: bold;">New Subtotal:</span>
-                                        <span id="total-amount1"
-                                            style="display:none; font-weight: bold; color: #004085;">₹{{ number_format($cartTotal, 2) }}</span>
+                                        <span>Final Total:</span>
+                                        <span style="font-weight: bold;">₹{{ number_format($finalTotal, 2) }}</span>
 
                                         <span>Shipping:</span>
                                         <span style="font-weight: bold;">₹50.00</span>
@@ -810,8 +809,8 @@
                             <form action="{{ route('user.checkout') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="order_ids" value="{{ $cartItems->pluck('id')->join(',') }}">
-                                <input type="hidden" name="total_amount" id="total-amount2"
-                                    value="{{  number_format($cartTotal + 50 + 30.40, 2) }}">
+                                <input type="text" name="total_amount"
+                                    value="{{  number_format($finalTotal + 50 + 30.40, 2) }}">
 
                                 <div style="margin-bottom: 1rem;">
                                     <h4>Select Payment Method</h4>
@@ -834,10 +833,10 @@
                                 </div>
 
                                 <label class="price" style="margin-right: 12pc;">
-                                    Total: <span id="total-amount3">₹{{ number_format($cartTotal + 50 + 30.40, 2) }}</span>
+                                    Total: <span id="total-amount3">₹{{ number_format($finalTotal + 50 + 30.40, 2) }}</span>
                                 </label>
 
-                                <button type="submit" class="button-30" role="button">Checkout</button>
+                                <button type="submit" class="button-30 checkout-btn" role="button">Checkout</button>
 
                             </form>
 
@@ -1002,6 +1001,10 @@
                             enter: "animated fadeInDown",
                             exit: "animated fadeOutUp",
                         },
+                        onClosed: function () {
+                            // Reload the page after the notification is closed
+                            location.reload();
+                        },
                     });
                 }
             })
@@ -1028,43 +1031,15 @@
                         enter: "animated fadeInDown",
                         exit: "animated fadeOutUp",
                     },
+                    onClosed: function () {
+                        // Reload the page after the notification is closed
+                        location.reload();
+                    },
                 });
             });
     }
 
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const newTotal = "{{ session('new_total', '') }}";
-        const discount = "{{ session('coupon_discount', default: '') }}";
-        const shipping = 50; // Shipping charge
-        const tax = 30.40;  // Tax charge
-
-
-        console.log(newTotal);
-        console.log(discount);
-
-        if (newTotal) {
-            const finalTotal = parseFloat(newTotal) + shipping + tax;
-            const discountSpan1 = document.getElementById('total-amount');
-            const discountSpan2 = document.getElementById('dis');
-
-            discountSpan1.style.display = 'inline';
-            discountSpan2.style.display = 'inline'; // Show the discount span
-
-
-            const new1 = document.getElementById('total-amount1');
-            const new2 = document.getElementById('new');
-
-            new1.style.display = 'inline';
-            new2.style.display = 'inline'; // Show the discount span
-
-
-            document.getElementById('total-amount').innerText = `- ₹${parseFloat(discount).toFixed(2)}`;
-            document.getElementById('total-amount1').innerText = `₹${parseFloat(newTotal).toFixed(2)}`;
-            document.getElementById('total-amount2').value = finalTotal;
-            document.getElementById('total-amount3').innerText = `₹${finalTotal.toFixed(2)}`;
-        }
-    });
 
     // Additional modal logic
     $(document).ready(function () {

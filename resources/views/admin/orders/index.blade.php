@@ -315,12 +315,14 @@
 
                         // Populate modal fields
                         document.getElementById('UserName').textContent = data.username;
-                        document.getElementById('selected_address').textContent = data.selected_address;
+
                         document.getElementById('dish_name').textContent = data.dish_name;
                         document.getElementById('total_amount').textContent = data.total_amount;
                         document.getElementById('status').textContent = data.status;
                         document.getElementById('payment_status').textContent = data.payment_status;
 
+                        const address = JSON.parse(data.selected_address);
+                        document.getElementById('selected_address').textContent = `${address.label} (${address.address_line_1}, ${address.address_line_2} , ${address.city}, ${address.pincode})`;
                         // Format and populate ingredients
                         const ingredientsList = document.getElementById('ingredients');
                         ingredientsList.innerHTML = ''; // Clear previous list if any

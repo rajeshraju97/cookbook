@@ -77,25 +77,19 @@ class OrderController extends Controller
         $user = Auth::guard('user')->user();
         $user_id = $user->id;
 
-        // Fetch orders with associated dish details
         $cartItems = Order::where('user_id', $user_id)
             ->where('status', 'Cart')
-            ->with('dishes') // Assuming you have a relationship with dishes
+            ->with('dishes')
             ->get();
 
-        // Calculate cart total
         $cartTotal = $cartItems->sum('total_amount');
-        session(['cart_total' => $cartTotal]);
+        $discountTotal = $cartItems->sum('discount_amount');
+        $finalTotal = $cartTotal - $discountTotal;
 
-        // dd(session('cart_total'));
-
-        // User addresses
         $addresses = UserAddress::where('user_id', $user_id)->get();
 
-        // Fetch used coupon IDs
+        // Fetch used and unused coupons logic remains the same
         $usedCouponIds = CouponUsage::where('user_id', $user_id)->pluck('coupon_id')->toArray();
-
-        // Fetch all applicable coupons
         $allCoupons = Coupon::where('active', true)
             ->whereDate('expiry_date', '>=', now())
             ->where(function ($query) use ($cartTotal) {
@@ -103,8 +97,6 @@ class OrderController extends Controller
                     ->orWhere('minimum_order_value', '<=', $cartTotal);
             })
             ->get();
-
-        // Separate used and unused coupons
         $usedCoupons = $allCoupons->whereIn('id', $usedCouponIds);
         $unusedCoupons = $allCoupons->whereNotIn('id', $usedCouponIds);
 
@@ -114,6 +106,8 @@ class OrderController extends Controller
             'usedCoupons' => $usedCoupons,
             'unusedCoupons' => $unusedCoupons,
             'cartTotal' => $cartTotal,
+            'discountTotal' => $discountTotal,
+            'finalTotal' => $finalTotal,
         ]);
     }
 
