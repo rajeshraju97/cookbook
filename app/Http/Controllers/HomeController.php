@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Dishes;
 use App\Models\DishType;
 use Illuminate\Http\Request;
+use App\Http\Middleware\TrackVisitor;
+
 
 class HomeController extends Controller
 {
     //
+
 
 
     public function index(Request $request, $type_id = null)

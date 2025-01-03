@@ -1,4 +1,4 @@
-const cacheName = "cookbook-pwa-v1";
+const cacheName = "cookbook-pwa-v2";
 const resourcesToCache = [
     "/",
     "/css/main.css",
@@ -34,9 +34,20 @@ self.addEventListener("activate", (event) => {
 
 // Fetch from cache or network
 self.addEventListener("fetch", (event) => {
-    event.respondWith(
-        caches.match(event.request).then((cachedResponse) => {
-            return cachedResponse || fetch(event.request);
-        })
-    );
+    // Exclude dynamic pages from cache
+    if (
+        event.request.url.includes("/login") ||
+        event.request.url.includes("/logout") ||
+        event.request.url.includes("/user/dashboard") ||
+        event.request.url.includes("/user/cart") ||
+        event.request.url === "/" // Exclude homepage
+    ) {
+        event.respondWith(fetch(event.request));
+    } else {
+        event.respondWith(
+            caches.match(event.request).then((cachedResponse) => {
+                return cachedResponse || fetch(event.request);
+            })
+        );
+    }
 });

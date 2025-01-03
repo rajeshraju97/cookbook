@@ -10,6 +10,7 @@ use Illuminate\Validation\Rules\Unique;
 use App\Models\UserAddress;
 
 
+
 class UserController extends Controller
 {
 
@@ -72,11 +73,22 @@ class UserController extends Controller
 
     public function logout(Request $request)
     {
+        // Get the user's session ID
+        $sessionId = $request->session()->getId();
+
+        // Log out the user
         Auth::guard('user')->logout();
+
+        // Manually delete the session from the database
+        \DB::table('sessions')->where('id', $sessionId)->delete();
+
+        // Invalidate and regenerate the session
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return redirect()->route('user.login');
     }
+
 
     public function addAddress(Request $request)
     {

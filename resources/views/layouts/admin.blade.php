@@ -33,6 +33,7 @@
     <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}" />
     <link rel="stylesheet" href="{{asset('css/plugins.min.css')}}" />
     <link rel="stylesheet" href="{{asset('css/kaiadmin.min.css')}}" />
+    <link rel="stylesheet" href="{{asset('css/demo.css')}}" />
 
 
     <!-- Add these to your main layout (e.g., app.blade.php) -->
@@ -184,7 +185,7 @@
                 <!-- Navbar Header -->
                 <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
                     <div class="container-fluid">
-                        <nav
+                        <!-- <nav
                             class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -194,7 +195,7 @@
                                 </div>
                                 <input type="text" placeholder="Search ..." class="form-control" />
                             </div>
-                        </nav>
+                        </nav> -->
 
                         <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
                             <li class="nav-item topbar-icon dropdown hidden-caret d-flex d-lg-none">
@@ -332,9 +333,6 @@
                                     </li>
                                 </ul>
                             </li>
-
-
-
 
 
                             <li class="nav-item topbar-icon dropdown hidden-caret">

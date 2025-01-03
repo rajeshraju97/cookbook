@@ -31,7 +31,10 @@ Route::get('/allrecipes', [HomeController::class, 'recipe_index'])->name('recipe
 Route::get('/allrecipes/{type_id?}', [HomeController::class, 'recipe_index'])->name('recipes.type');
 
 // Wildcard route should be the last route
-Route::get('/', [HomeController::class, 'index'])->name('welcome');
+Route::middleware(['track.visitor'])->group(function () {
+    Route::get('/', [HomeController::class, 'index'])->name('welcome');
+});
+
 Route::get('/{type_id?}', [HomeController::class, 'index'])->name('recipes.type.welcome');
 
 
